@@ -62,7 +62,7 @@ public class pageConnexion extends JFrame {
 		contentPane.add(labelLogin);
 		
 		JLabel labelMdp = new JLabel("Mot de passe :");
-		labelMdp.setBounds(45, 133, 109, 14);
+		labelMdp.setBounds(45, 133, 89, 14);
 		contentPane.add(labelMdp);
 		
 		textLogin = new JTextField();
@@ -75,7 +75,7 @@ public class pageConnexion extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 			}
 		});
-		btnValider.setBounds(315, 227, 109, 23);
+		btnValider.setBounds(308, 227, 116, 23);
 		contentPane.add(btnValider);
 		
 		textMdp = new JPasswordField();
