@@ -1,7 +1,6 @@
 package DAO;
 
 import java.sql.Connection;
-<<<<<<< HEAD
 import BDD.Connexion;
 
 public abstract class DAO<T> {
