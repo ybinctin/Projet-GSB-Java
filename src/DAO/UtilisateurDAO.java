@@ -21,7 +21,7 @@ public class UtilisateurDAO extends DAO<Utilisateur> {
 		// TODO Auto-generated method stub
 		
 		boolean ajoutReussi = false;
-		String request = "INSERT INTO utilisateur (idUtilisateur, nom, prenom, login, mdp, adresse, cp, ville, dateEmbauche, idrole, dernier_changement_mdp, mail, telFixe, telPortable)" 
+		String request = "INSERT INTO utilisateur (idUtilisateur, nom, prenom, login, mdp, adresse, cp, ville, dateEmbauche, idrole, dernier_changement_mdp, mail, num_fixe, num_portable)" 
 		+ " VALUES"
 				+ "(" + obj.getIdUtilisateur() + ", " + obj.getNom() +  ", " + obj.getPrenom() + ", " + obj.getLogin() + ", " + obj.getMdp() + ", " + obj.getAdresse() + ", " + obj.getCp() + ", " + obj.getVille() + ", " + obj.getDateEmbauche() + ", " + obj.getMail() + ", " + obj.getTelFixe() + ", " + obj.getTelPortable() + ")";
 		// Manque le idrole
@@ -66,7 +66,7 @@ public class UtilisateurDAO extends DAO<Utilisateur> {
 		// TODO Auto-generated method stub
 		String request = "UPDATE utilisateur"
 				+ "SET idutilisateur = '" + obj.getIdUtilisateur() + "' , nom = '" + obj.getNom() + "' , prenom = '" + obj.getPrenom() + "' , login = '" + obj.getLogin() + "' , mdp = '" + obj.getMdp() + "' , adresse = '" + obj.getAdresse() + "' , cp = '" + obj.getCp() + "' , dateEmbauche = '" + obj.getDateEmbauche() + "' , idrole = '" + obj.getRole().getIdrole() 
-				+ "' , dernier_changement_mdp = '" + null + "' , mail = '" + obj.getMail() + "' , telFixe = " + obj.getTelFixe() + "' , telPortable = '" + obj.getTelPortable()
+				+ "' , dernier_changement_mdp = '" + null + "' , mail = '" + obj.getMail() + "' , num_fixe = " + obj.getTelFixe() + "' , num_portable = '" + obj.getTelPortable()
 				+ "WHERE idutilisateur='" + obj.getIdUtilisateur() + "';";
 		return false;
 	}
@@ -89,8 +89,8 @@ public class UtilisateurDAO extends DAO<Utilisateur> {
 				Utilisateur user = new Utilisateur(resultat.getString("idutilisateur"), resultat.getString("nom"),
 						resultat.getString("prenom"), resultat.getString("login"), resultat.getString("mdp"),
 						resultat.getString("adresse"), resultat.getString("cp"), resultat.getString("ville"),
-						resultat.getDate("dateEmbauche"), resultat.getString("mail"), resultat.getString("telFixe"),
-						resultat.getString("telPortable"), null, roledao.find(resultat.getString("idrole")), null);
+						resultat.getDate("dateEmbauche"), resultat.getString("mail"), resultat.getString("num_fixe"),
+						resultat.getString("num_portable"), null, roledao.find(resultat.getString("idrole")), null);
 				return user;
 			}
 			else {
@@ -117,8 +117,8 @@ public class UtilisateurDAO extends DAO<Utilisateur> {
 				Utilisateur user = new Utilisateur(resultat.getString("idutilisateur"), resultat.getString("nom"),
 						resultat.getString("prenom"), resultat.getString("login"), resultat.getString("mdp"),
 						resultat.getString("adresse"), resultat.getString("cp"), resultat.getString("ville"),
-						resultat.getDate("dateEmbauche"), resultat.getString("mail"), resultat.getString("telFixe"),
-						resultat.getString("telPortable"), null, null, null);
+						resultat.getDate("dateEmbauche"), resultat.getString("mail"), resultat.getString("num_fixe"),
+						resultat.getString("num_portable"), null, null, null);
 				return user;
 			}
 			;
