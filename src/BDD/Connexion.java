@@ -6,7 +6,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Connexion {
-	private static final String URL = "jdbc:mysql://localhost:3306/gsbfrais-2025";
+	private static final String URL = "jdbc:mysql://localhost:3306/gsbfrais-2025-2";
 	private static final String Utilisateur = "myroot";
 	private static final String MDP = "root123*";
 	
