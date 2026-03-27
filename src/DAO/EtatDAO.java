@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import Objets.Etat;
 import Objets.Role;
 
-public class EtatDAO extends DAO<Etat>{
+public abstract class EtatDAO extends DAO<Etat>{
 	
 	private Connection con;
 
