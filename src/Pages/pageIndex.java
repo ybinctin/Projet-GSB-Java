@@ -43,7 +43,7 @@ public class pageIndex extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel(user.getRole().getLibellerole());
+		JLabel lblNewLabel = new JLabel("Fiche visiteur");
 		lblNewLabel.setHorizontalAlignment(SwingConstants.LEFT);
 		lblNewLabel.setFont(new Font("Nirmala UI", Font.BOLD, 20));
 		lblNewLabel.setBounds(10, 0, 195, 27);
@@ -57,7 +57,7 @@ public class pageIndex extends JFrame {
 		fl_menu.setAlignOnBaseline(true);
 		menu.setLayout(fl_menu);
 		
-		JLabel labelMenu = new JLabel("Menu {role]");
+		JLabel labelMenu = new JLabel("Menu " + user.getRole().getLibellerole().toLowerCase());
 		labelMenu.setFont(new Font("Yu Gothic UI", Font.BOLD, 14));
 		menu.add(labelMenu);
 		
