@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 import Objets.Role;
 
-public abstract class RoleDAO extends DAO<Role> {
+public class RoleDAO extends DAO<Role> {
 	
 	private Connection con;
 

@@ -46,7 +46,7 @@ public class FicheFraisDAO extends DAO<FicheFrais> {
 	}
 
 	@Override
-	public FicheFrais find(int id) {
+	public FicheFrais find(String id) {
 		return null;
 	}
 }

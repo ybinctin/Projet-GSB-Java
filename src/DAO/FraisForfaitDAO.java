@@ -49,7 +49,7 @@ public class FraisForfaitDAO extends DAO<FraisForfait>{
 	}
 
 	@Override
-	public FraisForfait find(int id) {
+	public FraisForfait find(String id) {
 		return null;
 	}
 }

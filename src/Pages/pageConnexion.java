@@ -6,6 +6,7 @@ import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
 import DAO.UtilisateurDAO;
+import Objets.Utilisateur;
 
 import javax.swing.JLabel;
 import javax.swing.JTextField;
@@ -59,7 +60,7 @@ public class pageConnexion extends JFrame {
 		JLabel titrePageConnexion = new JLabel("Page de connexion");
 		titrePageConnexion.setFont(new Font("Tahoma", Font.BOLD, 20));
 		titrePageConnexion.setHorizontalAlignment(SwingConstants.CENTER);
-		titrePageConnexion.setBounds(125, 22, 198, 20);
+		titrePageConnexion.setBounds(120, 11, 198, 33);
 		contentPane.add(titrePageConnexion);
 		
 		JLabel labelLogin = new JLabel("Login :");
@@ -80,7 +81,7 @@ public class pageConnexion extends JFrame {
 		textMdp.setBounds(178, 130, 190, 20);
 		contentPane.add(textMdp);
 		
-		labelErreur = new JLabel("Login / mot de passe incorrecte.");
+		labelErreur = new JLabel("Login / mot de passe incorrect.");
 		labelErreur.setForeground(new Color(255, 0, 0));
 		labelErreur.setBounds(178, 161, 206, 14);
 		labelErreur.setVisible(false);
@@ -93,11 +94,15 @@ public class pageConnexion extends JFrame {
 				String Mdp = textMdp.getText();
 				
 				UtilisateurDAO utilisateurdao = new UtilisateurDAO();
+				Utilisateur user = utilisateurdao.identification(login, Mdp);
 				
-				if(utilisateurdao.identification(login, Mdp) == true) {
-					pageIndex page_accueil = new pageIndex();
+				if(user != null) {
+					pageIndex page_accueil = new pageIndex(user);
 					page_accueil.show();
 					dispose();
+				}
+				else {
+					labelErreur.setVisible(true);
 				}
 				
 			}

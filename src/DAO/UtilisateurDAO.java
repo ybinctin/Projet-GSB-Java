@@ -71,9 +71,9 @@ public class UtilisateurDAO extends DAO<Utilisateur> {
 		return false;
 	}
 
-	public boolean identification(String login, String mdp) {
+	public Utilisateur identification(String login, String mdp) {
 		boolean utilisateurConnecté = false;
-		String request = "SELECT login, mdp" + " FROM utilisateur " + "WHERE login = \'" + login + "\'"
+		String request = "SELECT * " + " FROM utilisateur " + "WHERE login = \'" + login + "\'"
 				+ " AND mdp = \'" + mdp + "\';";
 		try {
 			Connection con = Connexion.getInstance();
@@ -81,22 +81,31 @@ public class UtilisateurDAO extends DAO<Utilisateur> {
 			ResultSet resultat = requete.executeQuery(request);
 
 			if (resultat.first()) {
-				System.out.println("Good good");
-				utilisateurConnecté = true;
+				String utilisateurID = resultat.getString("idutilisateur");
+				System.out.println("Utilisateur connecté: " + utilisateurID);
+				
+				RoleDAO roledao = new RoleDAO();
+
+				Utilisateur user = new Utilisateur(resultat.getString("idutilisateur"), resultat.getString("nom"),
+						resultat.getString("prenom"), resultat.getString("login"), resultat.getString("mdp"),
+						resultat.getString("adresse"), resultat.getString("cp"), resultat.getString("ville"),
+						resultat.getDate("dateEmbauche"), resultat.getString("mail"), resultat.getString("telFixe"),
+						resultat.getString("telPortable"), null, roledao.find(resultat.getString("idrole")), null);
+				return user;
 			}
 			else {
-				System.out.println("YOOOOOOO, y a rien bro");
+				System.out.println("Utilisateur non trouvé.");
 			}
 
 		} catch (Exception e) {
 			System.out.println(e);
 		}
 
-		return utilisateurConnecté;
+		return null;
 	}
 
 	@Override
-	public Utilisateur find(int id) {
+	public Utilisateur find(String id) {
 		// TODO Auto-generated method stub
 		String request = "SELECT * FROM utilisateur WHERE idUtilisateur = '" + id + "';";
 		try {
