@@ -9,10 +9,11 @@ import java.sql.Statement;
 import BDD.Connexion;
 
 public class UtilisateurDAO extends DAO<Utilisateur> {
+	
+	private Connection con;
 
 	public UtilisateurDAO() {
-		super(null);
-		// TODO Auto-generated constructor stub
+		this.con = connect;
 	}
 
 	@Override
