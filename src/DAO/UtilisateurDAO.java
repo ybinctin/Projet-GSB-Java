@@ -70,7 +70,33 @@ public class UtilisateurDAO extends DAO<Utilisateur> {
 		return false;
 	}
 
-	public Utilisateur find(String id) {
+	public boolean identification(String login, String mdp) {
+		boolean utilisateurConnecté = false;
+		String request = "SELECT login, mdp" + " FROM utilisateur " + "WHERE login = \'" + login + "\'"
+				+ " AND mdp = \'" + mdp + "\';";
+		try {
+			Connection con = Connexion.getInstance();
+			Statement requete = con.createStatement();
+			ResultSet resultat = requete.executeQuery(request);
+
+			if (resultat.first()) {
+				System.out.println("Good good");
+				utilisateurConnecté = true;
+			}
+			else {
+				System.out.println("YOOOOOOO, y a rien bro");
+			}
+
+		} catch (Exception e) {
+			System.out.println(e);
+		}
+
+		return utilisateurConnecté;
+	}
+
+	@Override
+	public Utilisateur find(int id) {
+		// TODO Auto-generated method stub
 		String request = "SELECT * FROM utilisateur WHERE idUtilisateur = '" + id + "';";
 		try {
 			Connection con = Connexion.getInstance();
@@ -90,33 +116,6 @@ public class UtilisateurDAO extends DAO<Utilisateur> {
 			System.out.println("Errreur : ");
 			System.out.println(e);
 		}
-		return null;
-	}
-
-	public boolean identification(String login, String mdp) {
-		boolean utilisateurConnecté = false;
-		String request = "SELECT login, mdp" + " FROM utilisateur " + "WHERE login = \'" + login + "\'"
-				+ " AND mdp = \'" + mdp + "\';";
-		try {
-			Connection con = Connexion.getInstance();
-			Statement requete = con.createStatement();
-			ResultSet resultat = requete.executeQuery(request);
-
-			if (resultat.first()) {
-				System.out.println("Good good");
-				utilisateurConnecté = true;
-			}
-
-		} catch (Exception e) {
-			System.out.println(e);
-		}
-
-		return utilisateurConnecté;
-	}
-
-	@Override
-	public Utilisateur find(int id) {
-		// TODO Auto-generated method stub
 		return null;
 	}
 }

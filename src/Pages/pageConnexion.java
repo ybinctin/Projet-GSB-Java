@@ -4,6 +4,9 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import DAO.UtilisateurDAO;
+
 import javax.swing.JLabel;
 import javax.swing.JTextField;
 import javax.swing.JButton;
@@ -12,6 +15,7 @@ import java.awt.event.ActionEvent;
 import javax.swing.JPasswordField;
 import javax.swing.SwingConstants;
 import java.awt.Font;
+import java.awt.Color;
 
 public class pageConnexion extends JFrame {
 
@@ -22,6 +26,7 @@ public class pageConnexion extends JFrame {
 	private JPanel contentPane;
 	private JTextField textLogin;
 	private JPasswordField textMdp;
+	private JLabel labelErreur;
 
 	/**
 	 * Launch the application.
@@ -66,20 +71,38 @@ public class pageConnexion extends JFrame {
 		contentPane.add(labelMdp);
 		
 		textLogin = new JTextField();
+		textLogin.setToolTipText("");
 		textLogin.setBounds(178, 100, 190, 20);
 		contentPane.add(textLogin);
 		textLogin.setColumns(10);
 		
+		textMdp = new JPasswordField();
+		textMdp.setBounds(178, 130, 190, 20);
+		contentPane.add(textMdp);
+		
+		labelErreur = new JLabel("Login / mot de passe incorrecte.");
+		labelErreur.setForeground(new Color(255, 0, 0));
+		labelErreur.setBounds(178, 161, 206, 14);
+		labelErreur.setVisible(false);
+		contentPane.add(labelErreur);
+		
 		JButton btnValider = new JButton("☑︎   Valider");
 		btnValider.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				String login = textLogin.getText();
+				String Mdp = textMdp.getText();
+				
+				UtilisateurDAO utilisateurdao = new UtilisateurDAO();
+				
+				if(utilisateurdao.identification(login, Mdp) == true) {
+					pageIndex page_accueil = new pageIndex();
+					page_accueil.show();
+					dispose();
+				}
+				
 			}
 		});
 		btnValider.setBounds(308, 227, 116, 23);
 		contentPane.add(btnValider);
-		
-		textMdp = new JPasswordField();
-		textMdp.setBounds(178, 130, 190, 20);
-		contentPane.add(textMdp);
 	}
 }
