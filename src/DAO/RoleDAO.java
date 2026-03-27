@@ -8,9 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 
 import Objets.Role;
-import ecoleDAO.Eleve;
 
-public class RoleDAO extends DAO<Role> {
+public abstract class RoleDAO extends DAO<Role> {
 	
 	private Connection con;
 
