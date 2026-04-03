@@ -1,4 +1,5 @@
 package Pages;
+
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -50,62 +51,62 @@ public class pageConnexion extends JFrame {
 	 */
 	public pageConnexion() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+		setBounds(700, 350, 450, 300);
+		setTitle("Se connecter à son espace");
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		JLabel titrePageConnexion = new JLabel("Page de connexion");
 		titrePageConnexion.setFont(new Font("Tahoma", Font.BOLD, 20));
 		titrePageConnexion.setHorizontalAlignment(SwingConstants.CENTER);
 		titrePageConnexion.setBounds(120, 11, 198, 33);
 		contentPane.add(titrePageConnexion);
-		
+
 		JLabel labelLogin = new JLabel("Login :");
 		labelLogin.setBounds(45, 103, 39, 14);
 		contentPane.add(labelLogin);
-		
+
 		JLabel labelMdp = new JLabel("Mot de passe :");
 		labelMdp.setBounds(45, 133, 89, 14);
 		contentPane.add(labelMdp);
-		
+
 		textLogin = new JTextField();
 		textLogin.setToolTipText("Saisissez votre PTN de login");
 		textLogin.setBounds(178, 100, 190, 20);
 		contentPane.add(textLogin);
 		textLogin.setColumns(10);
-		
+
 		textMdp = new JPasswordField();
 		textMdp.setToolTipText("Saissiez votre mot de passe");
 		textMdp.setBounds(178, 130, 190, 20);
 		contentPane.add(textMdp);
-		
+
 		labelErreur = new JLabel("Login / mot de passe incorrect.");
 		labelErreur.setForeground(new Color(255, 0, 0));
 		labelErreur.setBounds(178, 161, 206, 14);
 		labelErreur.setVisible(false);
 		contentPane.add(labelErreur);
-		
+
 		JButton btnValider = new JButton("☑︎   Valider");
 		btnValider.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String login = textLogin.getText();
 				String Mdp = textMdp.getText();
-				
+
 				UtilisateurDAO utilisateurdao = new UtilisateurDAO();
 				Utilisateur user = utilisateurdao.identification(login, Mdp);
-				
-				if(user != null) {
+
+				if (user != null) {
 					pageIndex page_accueil = new pageIndex(user);
 					page_accueil.show();
 					dispose();
-				}
-				else {
+				} else {
 					labelErreur.setVisible(true);
 				}
-				
+
 			}
 		});
 		btnValider.setBounds(308, 227, 116, 23);
