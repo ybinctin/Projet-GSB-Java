@@ -30,10 +30,25 @@ public class RegionDAO extends DAO<Region> {
 		return false;
 	}
 
-	@Override
-	public Region find(String id) {
-		// TODO Auto-generated method stub
-		return null;
+
+	public Region find(int id) {
+		String request = "SELECT * FROM regions where id_region = " + id + ";";
+		
+		try {
+			Connection con = Connexion.getInstance();
+			Statement requete = con.createStatement();
+			ResultSet resultat = requete.executeQuery(request);
+
+			while (resultat.next()) {
+				Region region = new Region(resultat.getInt("id_region"), resultat.getString("nom_region"));
+				return region;
+			};
+			
+		} catch (Exception e) {
+			System.out.println("Errreur : ");
+			System.out.println(e);
+		}
+		return null;	
 	}
 
 	public List<Region> obtenirToutesRegions() {
