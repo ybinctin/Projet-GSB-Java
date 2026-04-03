@@ -80,7 +80,8 @@ public class UtilisateurDAO extends DAO<Utilisateur> {
 			Statement requete = con.createStatement();
 			ResultSet resultat = requete.executeQuery(request);
 
-			if (resultat.first()) {
+			if (resultat.first() && !"VS".equals(resultat.getString("idrole")) && !"CP".equals(resultat.getString("idrole"))) {
+				System.out.println(resultat.getString("idrole"));
 				String utilisateurID = resultat.getString("idutilisateur");
 				System.out.println("Utilisateur connecté: " + utilisateurID);
 				
