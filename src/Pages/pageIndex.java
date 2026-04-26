@@ -1,12 +1,13 @@
 package Pages;
 
-import java.awt.EventQueue;
-
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
 import DAO.RegionDAO;
+import DAO.UtilisateurDAO;
 import Objets.Region;
 import Objets.Utilisateur;
 
@@ -14,6 +15,8 @@ import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import java.awt.Panel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.List;
 import java.awt.FlowLayout;
 import javax.swing.JButton;
@@ -65,9 +68,6 @@ public class pageIndex extends JFrame {
 		labelMenu.setFont(new Font("Yu Gothic UI", Font.BOLD, 14));
 		menu.add(labelMenu);
 
-		JButton btnConsulter = new JButton("Consulter");
-		menu.add(btnConsulter);
-
 		JButton btnModifier = new JButton("Modifier");
 		menu.add(btnModifier);
 
@@ -83,7 +83,7 @@ public class pageIndex extends JFrame {
 		List<Region> liste = regiondao.obtenirToutesRegions();
 
 		JComboBox selectRegion = new JComboBox();
-		selectRegion.setEditable(true);
+		selectRegion.setEditable(false);
 		selectRegion.setModel(new DefaultComboBoxModel(new String[] { "Sélectionner la région" }));
 		for (int i = 0; i < liste.size(); i++) {
 			selectRegion.addItem(liste.get(i).getNomRegion());
@@ -93,17 +93,60 @@ public class pageIndex extends JFrame {
 
 		filtreNom = new JTextField();
 		filtreNom.setToolTipText("Saisissez un nom");
-		filtreNom.setText("Recherche nom");
+		// filtreNom.setText("Recherche nom");
 		zoneFiltre.add(filtreNom);
 		filtreNom.setColumns(10);
 
 		filtreId = new JTextField();
-		filtreId.setText("Recherche ID");
+		filtreId.setToolTipText("Saisissez un ID");
+		// filtreId.setText("Recherche ID");
 		zoneFiltre.add(filtreId);
 		filtreId.setColumns(10);
 
 		table = new JTable();
+
+		DefaultTableModel model = new DefaultTableModel() {
+			@Override
+			public boolean isCellEditable(int row, int column) {
+				return false; // bloque toute modification
+			}
+		};
+
+		table.setModel(model);
+
+		// Création des colonnes
+		model.addColumn("idUtilisateur");
+		model.addColumn("Nom");
+		model.addColumn("Prénom");
+
+		UtilisateurDAO utilisateurdao = new UtilisateurDAO();
+		List<Utilisateur> listeUtilisateurs = utilisateurdao.tousLesUtilisateurs();
+
+		// Ajouts des valeurs dans les colonnes
+		for (Utilisateur utilisateurActuel : listeUtilisateurs) {
+			model.addRow(new Object[] { utilisateurActuel.getIdUtilisateur(), utilisateurActuel.getNom(),
+					utilisateurActuel.getPrenom() });
+		}
+
 		table.setBounds(10, 111, 414, 139);
-		contentPane.add(table);
+
+		JScrollPane scrollPane = new JScrollPane(table);
+		scrollPane.setBounds(10, 111, 414, 139);
+		contentPane.add(scrollPane);
+
+		JButton btnConsulter = new JButton("Consulter");
+		
+		// TODO: A terminer
+		btnConsulter.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (table.getSelectedRowCount() == 1) {
+					System.out.println(model.getValueAt(table.getSelectedRow(), 0));
+				} else {
+					System.out.println("Plus ou moins que 1");
+				}
+			}
+		});
+		
+		menu.add(btnConsulter);
 	}
 }

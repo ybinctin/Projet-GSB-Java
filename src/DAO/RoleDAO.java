@@ -7,10 +7,11 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 
+import BDD.Connexion;
 import Objets.Role;
 
 public class RoleDAO extends DAO<Role> {
-	
+
 	private Connection con;
 
 	public RoleDAO() {
@@ -25,8 +26,7 @@ public class RoleDAO extends DAO<Role> {
 			preparedStatement.setString(2, obj.getLibellerole());
 			preparedStatement.executeUpdate();
 			return true;
-		}
-		catch(SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
 		}
@@ -38,8 +38,7 @@ public class RoleDAO extends DAO<Role> {
 		try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
 			preparedStatement.executeUpdate();
 			return true;
-		}
-		catch(SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
 		}
@@ -51,20 +50,23 @@ public class RoleDAO extends DAO<Role> {
 	}
 
 	public Role find(String id) {
-		try {
-			Statement requete = con.createStatement();
-			ResultSet resultat = requete.executeQuery("select * from role where idrole = '" + id + "'");
+		String request = "select * from role where idrole = ?";
+
+		try (Connection con = Connexion.getInstance(); PreparedStatement requete = con.prepareStatement(request);) {
+			// Premier paramètre = id
+			requete.setString(1, id);
+			ResultSet resultat = requete.executeQuery();
+			
 			while (resultat.next()) {
 				Role role = new Role(resultat.getString("idrole"), resultat.getString("libellerole"));
 				return role;
 			}
-		}
-		catch(SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
-	
+
 	public ArrayList<Role> tousLesRoles() {
 		try {
 			ArrayList<Role> listeRoles = new ArrayList<>();
@@ -75,8 +77,7 @@ public class RoleDAO extends DAO<Role> {
 				listeRoles.add(role);
 			}
 			return listeRoles;
-		}
-		catch(SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return null;

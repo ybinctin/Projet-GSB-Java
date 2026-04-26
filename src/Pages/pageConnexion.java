@@ -74,7 +74,7 @@ public class pageConnexion extends JFrame {
 		contentPane.add(labelMdp);
 
 		textLogin = new JTextField();
-		textLogin.setToolTipText("Saisissez votre PTN de login");
+		textLogin.setToolTipText("Saisissez votre login");
 		textLogin.setBounds(178, 100, 190, 20);
 		contentPane.add(textLogin);
 		textLogin.setColumns(10);
