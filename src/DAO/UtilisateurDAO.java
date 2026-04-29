@@ -139,16 +139,16 @@ public class UtilisateurDAO extends DAO<Utilisateur> {
 				String mail = resultat.getString("mail");
 				String numFixe = resultat.getString("num_fixe");
 				String numPortable = resultat.getString("num_portable");
-				int idRegion = resultat.getInt("id_region");
+				// int idRegion = resultat.getInt("id_region");
 
 				resultat.close();
 				requete.close();
 
-				Region region = ReDAO.find(Integer.toString(idRegion));
+				// Region region = ReDAO.find(Integer.toString(idRegion));
 				Role role = RoDAO.find(idUser);
 
 				Utilisateur user = new Utilisateur(idUser, nom, prenom, login, mdp, adresse, cp, ville, dateEmbauche,
-						mail, numFixe, numPortable, region, role, null);
+						mail, numFixe, numPortable, null, role, null);
 
 				return user;
 			}

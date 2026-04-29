@@ -68,12 +68,6 @@ public class pageIndex extends JFrame {
 		labelMenu.setFont(new Font("Yu Gothic UI", Font.BOLD, 14));
 		menu.add(labelMenu);
 
-		JButton btnModifier = new JButton("Modifier");
-		menu.add(btnModifier);
-
-		JButton btnSupprimer = new JButton("Supprimer");
-		menu.add(btnSupprimer);
-
 		Panel zoneFiltre = new Panel();
 		zoneFiltre.setBounds(0, 72, 434, 33);
 		contentPane.add(zoneFiltre);
@@ -141,6 +135,11 @@ public class pageIndex extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if (table.getSelectedRowCount() == 1) {
 					System.out.println(model.getValueAt(table.getSelectedRow(), 0));
+
+					UtilisateurDAO utilisaDAO = new UtilisateurDAO();
+					Utilisateur utilisateur = utilisaDAO.find(model.getValueAt(table.getSelectedRow(), 0).toString());
+					pageEditionUtilisateur pageEU = new pageEditionUtilisateur(utilisateur, false);
+					pageEU.show();
 				} else {
 					System.out.println("Plus ou moins que 1");
 				}
@@ -148,5 +147,26 @@ public class pageIndex extends JFrame {
 		});
 		
 		menu.add(btnConsulter);
+		
+		JButton btnModifier = new JButton("Modifier");
+		btnModifier.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if (table.getSelectedRowCount() == 1) {
+					System.out.println(model.getValueAt(table.getSelectedRow(), 0));
+
+					UtilisateurDAO utilisaDAO = new UtilisateurDAO();
+					Utilisateur utilisateur = utilisaDAO.find(model.getValueAt(table.getSelectedRow(), 0).toString());
+					pageEditionUtilisateur pageEU = new pageEditionUtilisateur(utilisateur, true);
+					pageEU.show();
+				} else {
+					System.out.println("Plus ou moins que 1");
+				}
+			}
+		});
+		menu.add(btnModifier);
+
+		JButton btnSupprimer = new JButton("Supprimer");
+		menu.add(btnSupprimer);
 	}
+	
 }
