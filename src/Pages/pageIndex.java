@@ -17,6 +17,8 @@ import javax.swing.SwingConstants;
 import java.awt.Panel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
 import java.util.List;
 import java.awt.FlowLayout;
 import javax.swing.JButton;
@@ -36,11 +38,15 @@ public class pageIndex extends JFrame {
 	private JTextField filtreNom;
 	private JTextField filtreId;
 	private JTable table;
+	private DefaultTableModel model;
+	private List<Utilisateur> listeUtilisateurs;
+	public static pageIndex instance;
 
 	/**
 	 * Create the frame.
 	 */
-	public pageIndex(Utilisateur user) {
+	public pageIndex(Utilisateur utilisateurConnecte) {
+		instance = this;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(700, 350, 450, 300);
 		setTitle("Page d'accueil");
@@ -64,7 +70,7 @@ public class pageIndex extends JFrame {
 		fl_menu.setAlignOnBaseline(true);
 		menu.setLayout(fl_menu);
 
-		JLabel labelMenu = new JLabel("Menu " + user.getRole().getLibellerole().toLowerCase());
+		JLabel labelMenu = new JLabel("Menu " + utilisateurConnecte.getRole().getLibellerole().toLowerCase());
 		labelMenu.setFont(new Font("Yu Gothic UI", Font.BOLD, 14));
 		menu.add(labelMenu);
 
@@ -97,9 +103,21 @@ public class pageIndex extends JFrame {
 		zoneFiltre.add(filtreId);
 		filtreId.setColumns(10);
 
+		filtreNom.addKeyListener(new KeyAdapter() {
+		    public void keyReleased(KeyEvent e) {
+		        filtrer();
+		    }
+		});
+
+		filtreId.addKeyListener(new KeyAdapter() {
+		    public void keyReleased(KeyEvent e) {
+		        filtrer();
+		    }
+		});
+		
 		table = new JTable();
 
-		DefaultTableModel model = new DefaultTableModel() {
+		model = new DefaultTableModel() {
 			@Override
 			public boolean isCellEditable(int row, int column) {
 				return false; // bloque toute modification
@@ -113,14 +131,8 @@ public class pageIndex extends JFrame {
 		model.addColumn("Nom");
 		model.addColumn("Prénom");
 
-		UtilisateurDAO utilisateurdao = new UtilisateurDAO();
-		List<Utilisateur> listeUtilisateurs = utilisateurdao.tousLesUtilisateurs();
-
-		// Ajouts des valeurs dans les colonnes
-		for (Utilisateur utilisateurActuel : listeUtilisateurs) {
-			model.addRow(new Object[] { utilisateurActuel.getIdUtilisateur(), utilisateurActuel.getNom(),
-					utilisateurActuel.getPrenom() });
-		}
+		
+		updateListeUtilisateurs();
 
 		table.setBounds(10, 111, 414, 139);
 
@@ -138,7 +150,7 @@ public class pageIndex extends JFrame {
 
 					UtilisateurDAO utilisaDAO = new UtilisateurDAO();
 					Utilisateur utilisateur = utilisaDAO.find(model.getValueAt(table.getSelectedRow(), 0).toString());
-					pageEditionUtilisateur pageEU = new pageEditionUtilisateur(utilisateur, false);
+					pageEditionUtilisateur pageEU = new pageEditionUtilisateur(utilisateur, utilisateurConnecte, false);
 					pageEU.show();
 				} else {
 					System.out.println("Plus ou moins que 1");
@@ -156,7 +168,7 @@ public class pageIndex extends JFrame {
 
 					UtilisateurDAO utilisaDAO = new UtilisateurDAO();
 					Utilisateur utilisateur = utilisaDAO.find(model.getValueAt(table.getSelectedRow(), 0).toString());
-					pageEditionUtilisateur pageEU = new pageEditionUtilisateur(utilisateur, true);
+					pageEditionUtilisateur pageEU = new pageEditionUtilisateur(utilisateur, utilisateurConnecte, true);
 					pageEU.show();
 				} else {
 					System.out.println("Plus ou moins que 1");
@@ -167,6 +179,42 @@ public class pageIndex extends JFrame {
 
 		JButton btnSupprimer = new JButton("Supprimer");
 		menu.add(btnSupprimer);
+	}
+	
+	private void filtrer() {
+		model.setRowCount(0);
+		
+		String nomRecherche = filtreNom.getText().toLowerCase();
+		String idRecherche = filtreId.getText().toLowerCase();
+		
+		for (Utilisateur u : listeUtilisateurs) {
+			boolean Nom = u.getNom().toLowerCase().contains(nomRecherche);
+			boolean Id = String.valueOf(u.getIdUtilisateur().toLowerCase()).contains(idRecherche);
+			
+			if (Nom && Id) {
+			    model.addRow(new Object[]{
+			        u.getIdUtilisateur(),
+			        u.getNom(),
+			        u.getPrenom()
+			    });
+			}
+		}
+	}
+	
+	public void updateListeUtilisateurs() {
+		
+		UtilisateurDAO utilisateurdao = new UtilisateurDAO();
+		listeUtilisateurs = utilisateurdao.tousLesUtilisateurs();
+		
+		model.setRowCount(0);
+		
+		for (Utilisateur utilisateurActuel : listeUtilisateurs) {
+	        model.addRow(new Object[]{
+	            utilisateurActuel.getIdUtilisateur(),
+	            utilisateurActuel.getNom(),
+	            utilisateurActuel.getPrenom()
+	        });
+	    }
 	}
 	
 }

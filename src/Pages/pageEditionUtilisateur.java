@@ -26,7 +26,7 @@ public class pageEditionUtilisateur extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public pageEditionUtilisateur(Utilisateur utilisateur, boolean editable) {
+	public pageEditionUtilisateur(Utilisateur utilisateur, Utilisateur utilisateurConnecte, boolean editable) {
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -81,11 +81,15 @@ public class pageEditionUtilisateur extends JFrame {
 			public void actionPerformed(ActionEvent e) {
 				if (editable) {
 					UtilisateurDAO utilDAO = new UtilisateurDAO();
+					
 					utilisateur.setIdUtilisateur(text_idUtilisateur.getText());
 					utilisateur.setNom(text_nom.getText());
 					utilisateur.setPrenom(text_prenom.getText());
+					
 					boolean resultatUpdate = utilDAO.update(utilisateur);
+					
 					if (resultatUpdate) {
+						pageIndex.instance.updateListeUtilisateurs();
 						dispose();
 					}
 				}

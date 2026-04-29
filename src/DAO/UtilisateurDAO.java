@@ -70,13 +70,36 @@ public class UtilisateurDAO extends DAO<Utilisateur> {
 	@Override
 	public boolean update(Utilisateur obj) {
 		// TODO Auto-generated method stub
-		String request = "UPDATE utilisateur" + "SET idutilisateur = '" + obj.getIdUtilisateur() + "' , nom = '"
-				+ obj.getNom() + "' , prenom = '" + obj.getPrenom() + "' , login = '" + obj.getLogin() + "' , mdp = '"
-				+ obj.getMdp() + "' , adresse = '" + obj.getAdresse() + "' , cp = '" + obj.getCp()
-				+ "' , dateEmbauche = '" + obj.getDateEmbauche() + "' , idrole = '" + obj.getRole().getIdrole()
-				+ "' , dernier_changement_mdp = '" + null + "' , mail = '" + obj.getMail() + "' , num_fixe = "
-				+ obj.getTelFixe() + "' , num_portable = '" + obj.getTelPortable() + "' , id_region = '"
-				+ obj.getRegion().getIdRegion() + "WHERE idutilisateur='" + obj.getIdUtilisateur() + "';";
+		String request = "UPDATE utilisateur SET idutilisateur = ?, nom = ?, prenom = ?, login = ?, mdp = ?, adresse = ?, cp = ?, dateEmbauche = ?, idrole = ?, mail = ?, num_fixe = ?, num_portable = ? WHERE idutilisateur = ?";
+
+		try (Connection con = Connexion.getInstance(); PreparedStatement requete = con.prepareStatement(request);) {
+
+			requete.setString(1, obj.getIdUtilisateur());
+			requete.setString(2, obj.getNom());
+			requete.setString(3, obj.getPrenom());
+			requete.setString(4, obj.getLogin());
+			requete.setString(5, obj.getMdp());
+			requete.setString(6, obj.getAdresse());
+			requete.setString(7, obj.getCp());
+			requete.setDate(8, obj.getDateEmbauche());
+			requete.setString(9, obj.getRole().getIdrole()); 
+			// requete.setString(10, null); // dernier_changement_mdp
+			requete.setString(10, obj.getMail());
+			requete.setString(11, obj.getTelFixe());
+			requete.setString(12, obj.getTelPortable());
+			// id région ?
+			requete.setString(13, obj.getIdUtilisateur());
+
+			int resultatLignes = requete.executeUpdate();
+
+			if (resultatLignes > 0) {
+				return true;
+			}
+		}
+
+		catch (Exception e) {
+			System.out.println(e);
+		}
 		return false;
 	}
 
@@ -128,6 +151,7 @@ public class UtilisateurDAO extends DAO<Utilisateur> {
 			if (resultat.next()) {
 
 				String idUser = resultat.getString("idutilisateur");
+				String idRole = resultat.getString("idrole");
 				String nom = resultat.getString("nom");
 				String prenom = resultat.getString("prenom");
 				String login = resultat.getString("login");
@@ -145,7 +169,7 @@ public class UtilisateurDAO extends DAO<Utilisateur> {
 				requete.close();
 
 				// Region region = ReDAO.find(Integer.toString(idRegion));
-				Role role = RoDAO.find(idUser);
+				Role role = RoDAO.find(idRole);
 
 				Utilisateur user = new Utilisateur(idUser, nom, prenom, login, mdp, adresse, cp, ville, dateEmbauche,
 						mail, numFixe, numPortable, null, role, null);
@@ -174,6 +198,7 @@ public class UtilisateurDAO extends DAO<Utilisateur> {
 			while (resultat.next()) {
 
 				String idUser = resultat.getString("idutilisateur");
+				String idrole = resultat.getString("idrole");
 				String nom = resultat.getString("nom");
 				String prenom = resultat.getString("prenom");
 				String login = resultat.getString("login");
@@ -188,11 +213,11 @@ public class UtilisateurDAO extends DAO<Utilisateur> {
 				String idRegion = null;
 
 				// Region region = ReDAO.find(Integer.toString(idRegion));
-				Role role = RoDAO.find(idUser);
+				Role role = RoDAO.find(idrole);
 
 				Utilisateur user = new Utilisateur(idUser, nom, prenom, login, mdp, adresse, cp, ville, dateEmbauche,
 						mail, numFixe, numPortable, null, role, null);
-
+				
 				listeUtilisateurs.add(user);
 			}
 			;
