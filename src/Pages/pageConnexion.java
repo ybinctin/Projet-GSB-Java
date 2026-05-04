@@ -51,7 +51,8 @@ public class pageConnexion extends JFrame {
 	 */
 	public pageConnexion() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(700, 350, 450, 300);
+		setSize(724, 510);
+		setLocationRelativeTo(null);
 		setTitle("Se connecter à son espace");
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -62,35 +63,35 @@ public class pageConnexion extends JFrame {
 		JLabel titrePageConnexion = new JLabel("Page de connexion");
 		titrePageConnexion.setFont(new Font("Tahoma", Font.BOLD, 20));
 		titrePageConnexion.setHorizontalAlignment(SwingConstants.CENTER);
-		titrePageConnexion.setBounds(120, 11, 198, 33);
+		titrePageConnexion.setBounds(10, 11, 688, 33);
 		contentPane.add(titrePageConnexion);
 
 		JLabel labelLogin = new JLabel("Login :");
-		labelLogin.setBounds(45, 103, 128, 14);
+		labelLogin.setBounds(178, 191, 128, 14);
 		contentPane.add(labelLogin);
 
 		JLabel labelMdp = new JLabel("Mot de passe :");
-		labelMdp.setBounds(45, 133, 128, 14);
+		labelMdp.setBounds(178, 221, 128, 14);
 		contentPane.add(labelMdp);
 
 		textLogin = new JTextField();
 		textLogin.setToolTipText("Saisissez votre login");
-		textLogin.setBounds(178, 100, 190, 20);
+		textLogin.setBounds(311, 188, 190, 20);
 		contentPane.add(textLogin);
 		textLogin.setColumns(10);
 
 		textMdp = new JPasswordField();
 		textMdp.setToolTipText("Saissiez votre mot de passe");
-		textMdp.setBounds(178, 130, 190, 20);
+		textMdp.setBounds(311, 218, 190, 20);
 		contentPane.add(textMdp);
 
-		labelErreur = new JLabel("Login / mot de passe incorrect.");
+		labelErreur = new JLabel("ERREUR");
 		labelErreur.setForeground(new Color(255, 0, 0));
-		labelErreur.setBounds(178, 161, 206, 14);
+		labelErreur.setBounds(178, 249, 206, 14);
 		labelErreur.setVisible(false);
 		contentPane.add(labelErreur);
 
-		JButton btnValider = new JButton("☑︎   Valider");
+		JButton btnValider = new JButton("Se connecter");
 		btnValider.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String login = textLogin.getText();
@@ -100,17 +101,23 @@ public class pageConnexion extends JFrame {
 				Utilisateur user = utilisateurdao.identification(login, Mdp);
 
 				if (user != null) {
-					pageIndex page_accueil = new pageIndex(user);
-					page_accueil.show();
-					dispose();
+					if (user.getRole().getIdrole().equals("SC")) {
+						pageIndex page_accueil = new pageIndex(user);
+						page_accueil.show();
+						dispose();
+					} else {
+						labelErreur.setText("Accès non autorisé.");
+						labelErreur.setVisible(true);
+					}
 				} else {
+					labelErreur.setText("Login / mot de passe incorrect.");
 					labelErreur.setVisible(true);
 				}
 
 			}
 		});
-		
-		btnValider.setBounds(308, 227, 116, 23);
+
+		btnValider.setBounds(558, 437, 140, 23);
 		contentPane.add(btnValider);
 	}
 }

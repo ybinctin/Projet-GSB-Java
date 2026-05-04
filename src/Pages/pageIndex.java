@@ -41,6 +41,9 @@ public class pageIndex extends JFrame {
 	private DefaultTableModel model;
 	private List<Utilisateur> listeUtilisateurs;
 	public static pageIndex instance;
+	private JButton btnNewButton;
+	private JButton btnCreer;
+	private JLabel decoEspace;
 
 	/**
 	 * Create the frame.
@@ -48,7 +51,8 @@ public class pageIndex extends JFrame {
 	public pageIndex(Utilisateur utilisateurConnecte) {
 		instance = this;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(700, 350, 450, 300);
+		setSize(724, 510);
+		setLocationRelativeTo(null);
 		setTitle("Page d'accueil");
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -64,7 +68,7 @@ public class pageIndex extends JFrame {
 
 		Panel menu = new Panel();
 		menu.setBackground(new Color(228, 228, 228));
-		menu.setBounds(0, 33, 434, 33);
+		menu.setBounds(0, 33, 708, 33);
 		contentPane.add(menu);
 		FlowLayout fl_menu = new FlowLayout(FlowLayout.LEFT, 5, 5);
 		fl_menu.setAlignOnBaseline(true);
@@ -75,7 +79,7 @@ public class pageIndex extends JFrame {
 		menu.add(labelMenu);
 
 		Panel zoneFiltre = new Panel();
-		zoneFiltre.setBounds(0, 72, 434, 33);
+		zoneFiltre.setBounds(0, 72, 708, 33);
 		contentPane.add(zoneFiltre);
 		zoneFiltre.setLayout(new FlowLayout(FlowLayout.CENTER, 5, 5));
 
@@ -137,7 +141,7 @@ public class pageIndex extends JFrame {
 		table.setBounds(10, 111, 414, 139);
 
 		JScrollPane scrollPane = new JScrollPane(table);
-		scrollPane.setBounds(10, 111, 414, 139);
+		scrollPane.setBounds(10, 111, 688, 316);
 		contentPane.add(scrollPane);
 
 		JButton btnConsulter = new JButton("Consulter");
@@ -157,6 +161,8 @@ public class pageIndex extends JFrame {
 				}
 			}
 		});
+		menu.add(getDecoEspace());
+		menu.add(getBtnCreer());
 		
 		menu.add(btnConsulter);
 		
@@ -179,6 +185,7 @@ public class pageIndex extends JFrame {
 
 		JButton btnSupprimer = new JButton("Supprimer");
 		menu.add(btnSupprimer);
+		contentPane.add(getBtnNewButton());
 	}
 	
 	private void filtrer() {
@@ -216,5 +223,23 @@ public class pageIndex extends JFrame {
 	        });
 	    }
 	}
-	
+	private JButton getBtnNewButton() {
+		if (btnNewButton == null) {
+			btnNewButton = new JButton("Consulter les fiches");
+			btnNewButton.setBounds(285, 438, 177, 23);
+		}
+		return btnNewButton;
+	}
+	private JButton getBtnCreer() {
+		if (btnCreer == null) {
+			btnCreer = new JButton("Créer");
+		}
+		return btnCreer;
+	}
+	private JLabel getDecoEspace() {
+		if (decoEspace == null) {
+			decoEspace = new JLabel("                         ");
+		}
+		return decoEspace;
+	}
 }

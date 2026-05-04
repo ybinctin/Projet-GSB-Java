@@ -76,6 +76,13 @@ public class pageEditionUtilisateur extends JFrame {
 		contentPane.add(text_prenom);
 		text_prenom.setColumns(10);
 		
+		if(editable) {
+			setTitle("Modification de " + utilisateur.getNom() + " " + utilisateur.getPrenom());
+		}
+		else {
+			setTitle("Consultation de " + utilisateur.getNom() + " " + utilisateur.getPrenom());
+		}
+		
 		JButton btn_ok = new JButton("OK");
 		btn_ok.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
