@@ -26,25 +26,25 @@ public class pageEditionUtilisateur extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public pageEditionUtilisateur(Utilisateur utilisateur, Utilisateur utilisateurConnecte, boolean editable) {
+	public pageEditionUtilisateur(Utilisateur utilisateur, Utilisateur utilisateurConnecte, String etat) {
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
-		
+
 		JLabel lblIdutilisateur = new JLabel("IdUtilisateur:");
 		lblIdutilisateur.setBounds(10, 73, 125, 14);
 		contentPane.add(lblIdutilisateur);
-		
+
 		JLabel lblNom = new JLabel("Nom:");
 		lblNom.setBounds(10, 98, 125, 14);
 		contentPane.add(lblNom);
-		
+
 		JLabel lblPrenom = new JLabel("Prénom:");
 		lblPrenom.setBounds(10, 123, 125, 14);
 		contentPane.add(lblPrenom);
-		
+
 		JButton btn_cancel = new JButton("Annuler");
 		btn_cancel.setBounds(339, 231, 89, 23);
 		btn_cancel.addActionListener(new ActionListener() {
@@ -53,52 +53,61 @@ public class pageEditionUtilisateur extends JFrame {
 			}
 		});
 		contentPane.add(btn_cancel);
-		
-		
+
 		text_idUtilisateur = new JTextField();
-		text_idUtilisateur.setEditable(editable);
 		text_idUtilisateur.setBounds(145, 70, 250, 20);
 		text_idUtilisateur.setText(utilisateur.getIdUtilisateur());
 		contentPane.add(text_idUtilisateur);
 		text_idUtilisateur.setColumns(10);
-		
+
 		text_nom = new JTextField();
-		text_nom.setEditable(editable);
 		text_nom.setBounds(145, 95, 250, 20);
 		text_nom.setText(utilisateur.getNom());
 		contentPane.add(text_nom);
 		text_nom.setColumns(10);
-		
+
 		text_prenom = new JTextField();
-		text_prenom.setEditable(editable);
 		text_prenom.setBounds(145, 120, 250, 20);
 		text_prenom.setText(utilisateur.getPrenom());
 		contentPane.add(text_prenom);
 		text_prenom.setColumns(10);
-		
-		if(editable) {
-			setTitle("Modification de " + utilisateur.getNom() + " " + utilisateur.getPrenom());
+
+		if (etat.equals("modification") || etat.equals("creation")) {
+			text_idUtilisateur.setEditable(true);
+			text_nom.setEditable(true);
+			text_prenom.setEditable(true);
+
+			if (etat.equals("modification")) {
+				setTitle("Modification de " + utilisateur.getNom() + " " + utilisateur.getPrenom());
+			} else if (etat.equals("consultation")) {
+				setTitle("Consultation de " + utilisateur.getNom() + " " + utilisateur.getPrenom());
+			}
 		}
 		else {
-			setTitle("Consultation de " + utilisateur.getNom() + " " + utilisateur.getPrenom());
+			text_idUtilisateur.setEditable(false);
+			text_nom.setEditable(false);
+			text_prenom.setEditable(false);
 		}
-		
+
 		JButton btn_ok = new JButton("OK");
 		btn_ok.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (editable) {
+				if (etat.equals("modification")) {
 					UtilisateurDAO utilDAO = new UtilisateurDAO();
-					
+
 					utilisateur.setIdUtilisateur(text_idUtilisateur.getText());
 					utilisateur.setNom(text_nom.getText());
 					utilisateur.setPrenom(text_prenom.getText());
-					
+
 					boolean resultatUpdate = utilDAO.update(utilisateur);
-					
+
 					if (resultatUpdate) {
 						pageIndex.instance.updateListeUtilisateurs();
 						dispose();
 					}
+				}
+				else {
+					dispose();
 				}
 			}
 		});

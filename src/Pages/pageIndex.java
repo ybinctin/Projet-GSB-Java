@@ -26,6 +26,7 @@ import java.awt.Color;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JTextField;
+import javax.swing.ListSelectionModel;
 import javax.swing.JTable;
 
 public class pageIndex extends JFrame {
@@ -41,8 +42,6 @@ public class pageIndex extends JFrame {
 	private DefaultTableModel model;
 	private List<Utilisateur> listeUtilisateurs;
 	public static pageIndex instance;
-	private JButton btnNewButton;
-	private JButton btnCreer;
 	private JLabel decoEspace;
 
 	/**
@@ -95,31 +94,32 @@ public class pageIndex extends JFrame {
 		selectRegion.setToolTipText("");
 		zoneFiltre.add(selectRegion);
 
-		filtreNom = new JTextField();
-		filtreNom.setToolTipText("Saisissez un nom");
-		// filtreNom.setText("Recherche nom");
-		zoneFiltre.add(filtreNom);
-		filtreNom.setColumns(10);
-
 		filtreId = new JTextField();
 		filtreId.setToolTipText("Saisissez un ID");
 		// filtreId.setText("Recherche ID");
 		zoneFiltre.add(filtreId);
 		filtreId.setColumns(10);
 
-		filtreNom.addKeyListener(new KeyAdapter() {
-		    public void keyReleased(KeyEvent e) {
-		        filtrer();
-		    }
+		filtreId.addKeyListener(new KeyAdapter() {
+			public void keyReleased(KeyEvent e) {
+				filtrer();
+			}
 		});
 
-		filtreId.addKeyListener(new KeyAdapter() {
-		    public void keyReleased(KeyEvent e) {
-		        filtrer();
-		    }
+		filtreNom = new JTextField();
+		filtreNom.setToolTipText("Saisissez un nom");
+		// filtreNom.setText("Recherche nom");
+		zoneFiltre.add(filtreNom);
+		filtreNom.setColumns(10);
+
+		filtreNom.addKeyListener(new KeyAdapter() {
+			public void keyReleased(KeyEvent e) {
+				filtrer();
+			}
 		});
-		
+
 		table = new JTable();
+		table.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		model = new DefaultTableModel() {
 			@Override
@@ -135,7 +135,6 @@ public class pageIndex extends JFrame {
 		model.addColumn("Nom");
 		model.addColumn("Prénom");
 
-		
 		updateListeUtilisateurs();
 
 		table.setBounds(10, 111, 414, 139);
@@ -143,99 +142,85 @@ public class pageIndex extends JFrame {
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setBounds(10, 111, 688, 316);
 		contentPane.add(scrollPane);
-
-		JButton btnConsulter = new JButton("Consulter");
-		
-		// TODO: A terminer
-		btnConsulter.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				if (table.getSelectedRowCount() == 1) {
-					System.out.println(model.getValueAt(table.getSelectedRow(), 0));
-
-					UtilisateurDAO utilisaDAO = new UtilisateurDAO();
-					Utilisateur utilisateur = utilisaDAO.find(model.getValueAt(table.getSelectedRow(), 0).toString());
-					pageEditionUtilisateur pageEU = new pageEditionUtilisateur(utilisateur, utilisateurConnecte, false);
-					pageEU.show();
-				} else {
-					System.out.println("Plus ou moins que 1");
-				}
-			}
-		});
 		menu.add(getDecoEspace());
-		menu.add(getBtnCreer());
-		
-		menu.add(btnConsulter);
-		
+
 		JButton btnModifier = new JButton("Modifier");
 		btnModifier.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				if (table.getSelectedRowCount() == 1) {
-					System.out.println(model.getValueAt(table.getSelectedRow(), 0));
+				System.out.println(model.getValueAt(table.getSelectedRow(), 0));
 
-					UtilisateurDAO utilisaDAO = new UtilisateurDAO();
-					Utilisateur utilisateur = utilisaDAO.find(model.getValueAt(table.getSelectedRow(), 0).toString());
-					pageEditionUtilisateur pageEU = new pageEditionUtilisateur(utilisateur, utilisateurConnecte, true);
-					pageEU.show();
-				} else {
-					System.out.println("Plus ou moins que 1");
-				}
+				UtilisateurDAO utilisaDAO = new UtilisateurDAO();
+				Utilisateur utilisateur = utilisaDAO.find(model.getValueAt(table.getSelectedRow(), 0).toString());
+				pageEditionUtilisateur pageEU = new pageEditionUtilisateur(utilisateur, utilisateurConnecte,
+						"modification");
+				pageEU.show();
 			}
 		});
+
+		JButton btnConsulter = new JButton("Consulter");
+
+		// TODO: A terminer
+		btnConsulter.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println(model.getValueAt(table.getSelectedRow(), 0));
+
+				UtilisateurDAO utilisaDAO = new UtilisateurDAO();
+				Utilisateur utilisateur = utilisaDAO.find(model.getValueAt(table.getSelectedRow(), 0).toString());
+				pageEditionUtilisateur pageEU = new pageEditionUtilisateur(utilisateur, utilisateurConnecte,
+						"consultation");
+				pageEU.show();
+			}
+		});
+
+		JButton btnCreer = new JButton("Créer");
+		btnCreer.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+
+			}
+		});
+		menu.add(btnCreer);
+		menu.add(btnConsulter);
+
 		menu.add(btnModifier);
 
 		JButton btnSupprimer = new JButton("Supprimer");
 		menu.add(btnSupprimer);
-		contentPane.add(getBtnNewButton());
+
+		JButton btnNewButton = new JButton("Consulter les fiches");
+		btnNewButton.setBounds(285, 438, 177, 23);
+		contentPane.add(btnNewButton);
+
 	}
-	
+
 	private void filtrer() {
 		model.setRowCount(0);
-		
+
 		String nomRecherche = filtreNom.getText().toLowerCase();
 		String idRecherche = filtreId.getText().toLowerCase();
-		
+
 		for (Utilisateur u : listeUtilisateurs) {
 			boolean Nom = u.getNom().toLowerCase().contains(nomRecherche);
 			boolean Id = String.valueOf(u.getIdUtilisateur().toLowerCase()).contains(idRecherche);
-			
+
 			if (Nom && Id) {
-			    model.addRow(new Object[]{
-			        u.getIdUtilisateur(),
-			        u.getNom(),
-			        u.getPrenom()
-			    });
+				model.addRow(new Object[] { u.getIdUtilisateur(), u.getNom(), u.getPrenom() });
 			}
 		}
 	}
-	
+
 	public void updateListeUtilisateurs() {
-		
+
 		UtilisateurDAO utilisateurdao = new UtilisateurDAO();
 		listeUtilisateurs = utilisateurdao.tousLesUtilisateurs();
-		
+
 		model.setRowCount(0);
-		
+
 		for (Utilisateur utilisateurActuel : listeUtilisateurs) {
-	        model.addRow(new Object[]{
-	            utilisateurActuel.getIdUtilisateur(),
-	            utilisateurActuel.getNom(),
-	            utilisateurActuel.getPrenom()
-	        });
-	    }
-	}
-	private JButton getBtnNewButton() {
-		if (btnNewButton == null) {
-			btnNewButton = new JButton("Consulter les fiches");
-			btnNewButton.setBounds(285, 438, 177, 23);
+			model.addRow(new Object[] { utilisateurActuel.getIdUtilisateur(), utilisateurActuel.getNom(),
+					utilisateurActuel.getPrenom() });
 		}
-		return btnNewButton;
 	}
-	private JButton getBtnCreer() {
-		if (btnCreer == null) {
-			btnCreer = new JButton("Créer");
-		}
-		return btnCreer;
-	}
+
 	private JLabel getDecoEspace() {
 		if (decoEspace == null) {
 			decoEspace = new JLabel("                         ");
