@@ -29,7 +29,7 @@ import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.JTable;
 
-public class pageIndex extends JFrame {
+public class pageSecretaire extends JFrame {
 
 	/**
 	 * 
@@ -41,13 +41,14 @@ public class pageIndex extends JFrame {
 	private JTable table;
 	private DefaultTableModel model;
 	private List<Utilisateur> listeUtilisateurs;
-	public static pageIndex instance;
+	public static pageSecretaire instance;
 	private JLabel decoEspace;
+	private JLabel lbl_debug;
 
 	/**
 	 * Create the frame.
 	 */
-	public pageIndex(Utilisateur utilisateurConnecte) {
+	public pageSecretaire(Utilisateur utilisateurConnecte) {
 		instance = this;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(724, 510);
@@ -186,10 +187,6 @@ public class pageIndex extends JFrame {
 		JButton btnSupprimer = new JButton("Supprimer");
 		menu.add(btnSupprimer);
 
-		JButton btnNewButton = new JButton("Consulter les fiches");
-		btnNewButton.setBounds(285, 438, 177, 23);
-		contentPane.add(btnNewButton);
-
 	}
 
 	private void filtrer() {
@@ -226,5 +223,12 @@ public class pageIndex extends JFrame {
 			decoEspace = new JLabel("                         ");
 		}
 		return decoEspace;
+	}
+	private JLabel getLbl_debug() {
+		if (lbl_debug == null) {
+			lbl_debug = new JLabel("Debug");
+			lbl_debug.setBounds(20, 442, 177, 14);
+		}
+		return lbl_debug;
 	}
 }

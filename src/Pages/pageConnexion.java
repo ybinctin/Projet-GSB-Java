@@ -102,9 +102,13 @@ public class pageConnexion extends JFrame {
 
 				if (user != null) {
 					if (user.getRole().getIdrole().equals("SC")) {
-						pageIndex page_accueil = new pageIndex(user);
+						pageSecretaire page_accueil = new pageSecretaire(user);
 						page_accueil.show();
 						dispose();
+					} else if (user.getRole().getIdrole().equals("RS")) {
+
+					} else if (user.getRole().getIdrole().equals("DR")) {
+
 					} else {
 						labelErreur.setText("Accès non autorisé.");
 						labelErreur.setVisible(true);

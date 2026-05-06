@@ -227,4 +227,47 @@ public class UtilisateurDAO extends DAO<Utilisateur> {
 		}
 		return listeUtilisateurs;
 	}
+	
+	public List<Utilisateur> utilisateursDeRegion(String id_nom) {
+		String request = "SELECT * FROM utilisateur INNER JOIN regions ON regions.id_region = utilisateur.id_region WHERE regions.nom_region = ?";
+		List<Utilisateur> listeUtilisateurs = new ArrayList<>();
+
+		try (Connection con = Connexion.getInstance(); PreparedStatement requete = con.prepareStatement(request);) {
+			requete.setString(1, id_nom);
+			ResultSet resultat = requete.executeQuery();
+			// RegionDAO ReDAO = new RegionDAO();
+			RoleDAO RoDAO = new RoleDAO();
+
+			while (resultat.next()) {
+
+				String idUser = resultat.getString("idutilisateur");
+				String idrole = resultat.getString("idrole");
+				String nom = resultat.getString("nom");
+				String prenom = resultat.getString("prenom");
+				String login = resultat.getString("login");
+				String mdp = resultat.getString("mdp");
+				String adresse = resultat.getString("adresse");
+				String cp = resultat.getString("cp");
+				String ville = resultat.getString("ville");
+				Date dateEmbauche = resultat.getDate("dateEmbauche");
+				String mail = resultat.getString("mail");
+				String numFixe = resultat.getString("num_fixe");
+				String numPortable = resultat.getString("num_portable");
+				String idRegion = null;
+
+				// Region region = ReDAO.find(Integer.toString(idRegion));
+				Role role = RoDAO.find(idrole);
+
+				Utilisateur user = new Utilisateur(idUser, nom, prenom, login, mdp, adresse, cp, ville, dateEmbauche,
+						mail, numFixe, numPortable, null, role, null);
+				
+				listeUtilisateurs.add(user);
+			}
+			;
+		} catch (Exception e) {
+			System.out.println("Errreur : ");
+			System.out.println(e);
+		}
+		return listeUtilisateurs;
+	}
 }

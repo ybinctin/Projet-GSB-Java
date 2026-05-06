@@ -102,7 +102,7 @@ public class pageEditionUtilisateur extends JFrame {
 					boolean resultatUpdate = utilDAO.update(utilisateur);
 
 					if (resultatUpdate) {
-						pageIndex.instance.updateListeUtilisateurs();
+						pageSecretaire.instance.updateListeUtilisateurs();
 						dispose();
 					}
 				}
