@@ -55,6 +55,8 @@ public class pageDirecteur extends JFrame {
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
+		UtilisateurDAO utilisateurdao = new UtilisateurDAO();
+
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
@@ -90,11 +92,19 @@ public class pageDirecteur extends JFrame {
 		for (int i = 0; i < liste.size(); i++) {
 			selectRegion.addItem(liste.get(i).getNomRegion());
 		}
-		
+
 		// Obtention de la valeur de région selectionnée
 		selectRegion.addActionListener(e -> {
-			System.out.println(selectRegion.getSelectedItem());
+			if (!selectRegion.getSelectedItem().equals("Sélectionner la région")) {
+				System.out.println(selectRegion.getSelectedItem());
+				listeUtilisateurs = utilisateurdao.utilisateursDeRegion(selectRegion.getSelectedItem().toString());
+				filtrer();
+			} else {
+				listeUtilisateurs = utilisateurdao.tousLesUtilisateurs();
+				filtrer();
+			}
 		});
+
 		zoneFiltre.add(selectRegion);
 
 		filtreId = new JTextField();

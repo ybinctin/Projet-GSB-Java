@@ -27,25 +27,37 @@ public class UtilisateurDAO extends DAO<Utilisateur> {
 	@Override
 	public boolean create(Utilisateur obj) {
 		// TODO Auto-generated method stub
+		String request = "INSERT INTO utilisateur (idUtilisateur, nom, prenom, login, mdp, adresse, cp, ville, dateEmbauche, idrole, dernier_changement_mdp, mail, num_fixe, num_portable, id_region) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-		boolean ajoutReussi = false;
-		String request = "INSERT INTO utilisateur (idUtilisateur, nom, prenom, login, mdp, adresse, cp, ville, dateEmbauche, idrole, dernier_changement_mdp, mail, num_fixe, num_portable, id_region)"
-				+ " VALUES" + "(" + obj.getIdUtilisateur() + ", " + obj.getNom() + ", " + obj.getPrenom() + ", "
-				+ obj.getLogin() + ", " + obj.getMdp() + ", " + obj.getAdresse() + ", " + obj.getCp() + ", "
-				+ obj.getVille() + ", " + obj.getDateEmbauche() + ", " + obj.getMail() + ", " + obj.getTelFixe() + ", "
-				+ obj.getTelPortable() + ", " + obj.getRegion().getIdRegion() + ")";
-		// Manque le idrole
-		try {
-			Connection con = Connexion.getInstance();
-			Statement requete = con.createStatement();
-			ResultSet resultat = requete.executeQuery(request);
+		try (Connection con = Connexion.getInstance(); PreparedStatement requete = con.prepareStatement(request);) {
 
-			System.out.println("L'utilisateur suivant à été ajouté: " + obj);
-			ajoutReussi = true;
-		} catch (Exception e) {
+			requete.setString(1, obj.getIdUtilisateur());
+			requete.setString(2, obj.getNom());
+			requete.setString(3, obj.getPrenom());
+			requete.setString(4, obj.getLogin());
+			requete.setString(5, obj.getMdp());
+			requete.setString(6, obj.getAdresse());
+			requete.setString(7, obj.getCp());
+			requete.setDate(8, obj.getDateEmbauche());
+			requete.setString(9, obj.getRole().getIdrole());
+			// requete.setString(10, null); // dernier_changement_mdp
+			requete.setString(10, obj.getMail());
+			requete.setString(11, obj.getTelFixe());
+			requete.setString(12, obj.getTelPortable());
+			// id région ?
+			requete.setString(13, obj.getIdUtilisateur());
+
+			int resultatLignes = requete.executeUpdate();
+
+			if (resultatLignes > 0) {
+				return true;
+			}
+		}
+
+		catch (Exception e) {
 			System.out.println(e);
 		}
-		return ajoutReussi;
+		return false;
 	}
 
 	@Override
@@ -82,7 +94,7 @@ public class UtilisateurDAO extends DAO<Utilisateur> {
 			requete.setString(6, obj.getAdresse());
 			requete.setString(7, obj.getCp());
 			requete.setDate(8, obj.getDateEmbauche());
-			requete.setString(9, obj.getRole().getIdrole()); 
+			requete.setString(9, obj.getRole().getIdrole());
 			// requete.setString(10, null); // dernier_changement_mdp
 			requete.setString(10, obj.getMail());
 			requete.setString(11, obj.getTelFixe());
@@ -112,9 +124,8 @@ public class UtilisateurDAO extends DAO<Utilisateur> {
 
 			// Vérification que l'utilisateur soit un Directeur RH, Secrétaire RH ou
 			// Responsable RH
-			if (resultat.next() && !"VS".equals(resultat.getString("idrole"))
-					&& !"CP".equals(resultat.getString("idrole"))) {
-				System.out.println(resultat.getString("idrole"));
+			if (resultat.next()) {
+				System.out.println(resultat.getString("idrole")); // Débug rôle
 				String utilisateurID = resultat.getString("idutilisateur");
 				System.out.println("Utilisateur connecté: " + utilisateurID);
 
@@ -217,7 +228,7 @@ public class UtilisateurDAO extends DAO<Utilisateur> {
 
 				Utilisateur user = new Utilisateur(idUser, nom, prenom, login, mdp, adresse, cp, ville, dateEmbauche,
 						mail, numFixe, numPortable, null, role, null);
-				
+
 				listeUtilisateurs.add(user);
 			}
 			;
@@ -227,7 +238,7 @@ public class UtilisateurDAO extends DAO<Utilisateur> {
 		}
 		return listeUtilisateurs;
 	}
-	
+
 	public List<Utilisateur> utilisateursDeRegion(String id_nom) {
 		String request = "SELECT * FROM utilisateur INNER JOIN regions ON regions.id_region = utilisateur.id_region WHERE regions.nom_region = ?";
 		List<Utilisateur> listeUtilisateurs = new ArrayList<>();
@@ -260,7 +271,7 @@ public class UtilisateurDAO extends DAO<Utilisateur> {
 
 				Utilisateur user = new Utilisateur(idUser, nom, prenom, login, mdp, adresse, cp, ville, dateEmbauche,
 						mail, numFixe, numPortable, null, role, null);
-				
+
 				listeUtilisateurs.add(user);
 			}
 			;

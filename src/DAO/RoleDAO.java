@@ -56,7 +56,7 @@ public class RoleDAO extends DAO<Role> {
 			// Premier paramètre = id
 			requete.setString(1, id);
 			ResultSet resultat = requete.executeQuery();
-			
+
 			while (resultat.next()) {
 				Role role = new Role(resultat.getString("idrole"), resultat.getString("libellerole"));
 				return role;

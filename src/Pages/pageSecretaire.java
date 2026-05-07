@@ -44,18 +44,22 @@ public class pageSecretaire extends JFrame {
 	public static pageSecretaire instance;
 	private JLabel decoEspace;
 	private JLabel lbl_debug;
+	private Utilisateur utilisateurConnectee;
 
 	/**
 	 * Create the frame.
 	 */
 	public pageSecretaire(Utilisateur utilisateurConnecte) {
 		instance = this;
+		utilisateurConnectee = utilisateurConnecte;
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(724, 510);
 		setLocationRelativeTo(null);
-		setTitle("Page d'accueil");
+		setTitle("| Espace secrétaire");
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+
+		UtilisateurDAO utilisateurdao = new UtilisateurDAO();
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
@@ -92,7 +96,19 @@ public class pageSecretaire extends JFrame {
 		for (int i = 0; i < liste.size(); i++) {
 			selectRegion.addItem(liste.get(i).getNomRegion());
 		}
-		selectRegion.setToolTipText("");
+
+		// Au changement de la valeur de selection
+		selectRegion.addActionListener(e -> {
+			if (!selectRegion.getSelectedItem().equals("Sélectionner la région")) {
+				System.out.println(selectRegion.getSelectedItem());
+				listeUtilisateurs = utilisateurdao.utilisateursDeRegion(selectRegion.getSelectedItem().toString());
+				filtrer();
+			} else {
+				listeUtilisateurs = utilisateurdao.tousLesUtilisateurs();
+				filtrer();
+			}
+		});
+
 		zoneFiltre.add(selectRegion);
 
 		filtreId = new JTextField();
@@ -148,35 +164,23 @@ public class pageSecretaire extends JFrame {
 		JButton btnModifier = new JButton("Modifier");
 		btnModifier.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println(model.getValueAt(table.getSelectedRow(), 0));
-
-				UtilisateurDAO utilisaDAO = new UtilisateurDAO();
-				Utilisateur utilisateur = utilisaDAO.find(model.getValueAt(table.getSelectedRow(), 0).toString());
-				pageEditionUtilisateur pageEU = new pageEditionUtilisateur(utilisateur, utilisateurConnecte,
-						"modification");
-				pageEU.show();
+				afficherPageMode("modification", utilisateurConnecte);
 			}
 		});
 
 		JButton btnConsulter = new JButton("Consulter");
 
-		// TODO: A terminer
 		btnConsulter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println(model.getValueAt(table.getSelectedRow(), 0));
-
-				UtilisateurDAO utilisaDAO = new UtilisateurDAO();
-				Utilisateur utilisateur = utilisaDAO.find(model.getValueAt(table.getSelectedRow(), 0).toString());
-				pageEditionUtilisateur pageEU = new pageEditionUtilisateur(utilisateur, utilisateurConnecte,
-						"consultation");
-				pageEU.show();
+				afficherPageMode("consultation", utilisateurConnecte);
 			}
 		});
 
 		JButton btnCreer = new JButton("Créer");
 		btnCreer.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-
+				pageAjoutVisiteur pageAjout = new pageAjoutVisiteur(utilisateurConnecte);
+				pageAjout.show();
 			}
 		});
 		menu.add(btnCreer);
@@ -224,11 +228,26 @@ public class pageSecretaire extends JFrame {
 		}
 		return decoEspace;
 	}
+
 	private JLabel getLbl_debug() {
 		if (lbl_debug == null) {
 			lbl_debug = new JLabel("Debug");
 			lbl_debug.setBounds(20, 442, 177, 14);
 		}
 		return lbl_debug;
+	}
+
+	private void afficherPageMode(String mode, Utilisateur utilisateurConnecte) {
+		if (table.getSelectedRowCount() == 1) {
+
+			System.out.println(model.getValueAt(table.getSelectedRow(), 0));
+
+			UtilisateurDAO utilisaDAO = new UtilisateurDAO();
+			Utilisateur utilisateur = utilisaDAO.find(model.getValueAt(table.getSelectedRow(), 0).toString());
+			pageEditionUtilisateur pageEU = new pageEditionUtilisateur(utilisateur, utilisateurConnecte, mode);
+			pageEU.show();
+		} else {
+			System.out.println("Nombre de ligne selectionnée différent de 1.");
+		}
 	}
 }

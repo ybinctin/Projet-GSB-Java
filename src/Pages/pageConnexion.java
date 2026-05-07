@@ -53,7 +53,7 @@ public class pageConnexion extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(724, 430);
 		setLocationRelativeTo(null);
-		setTitle("Page de connexion");
+		setTitle("| Page de connexion");
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
@@ -63,36 +63,36 @@ public class pageConnexion extends JFrame {
 		JLabel titrePageConnexion = new JLabel("Connexion à son espace");
 		titrePageConnexion.setFont(new Font("Tahoma", Font.BOLD, 30));
 		titrePageConnexion.setHorizontalAlignment(SwingConstants.CENTER);
-		titrePageConnexion.setBounds(10, 11, 688, 50);
+		titrePageConnexion.setBounds(10, 35, 688, 50);
 		contentPane.add(titrePageConnexion);
 
 		JLabel labelLogin = new JLabel("Login :");
 		labelLogin.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		labelLogin.setBounds(142, 135, 172, 33);
+		labelLogin.setBounds(122, 150, 172, 33);
 		contentPane.add(labelLogin);
 
 		JLabel labelMdp = new JLabel("Mot de passe :");
 		labelMdp.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		labelMdp.setBounds(80, 197, 172, 29);
+		labelMdp.setBounds(60, 212, 172, 29);
 		contentPane.add(labelMdp);
 
 		textLogin = new JTextField();
-		textLogin.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		textLogin.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		textLogin.setToolTipText("Saisissez votre login");
-		textLogin.setBounds(229, 139, 371, 30);
+		textLogin.setBounds(209, 154, 371, 30);
 		contentPane.add(textLogin);
 		textLogin.setColumns(10);
 
 		textMdp = new JPasswordField();
-		textMdp.setFont(new Font("Tahoma", Font.PLAIN, 13));
+		textMdp.setFont(new Font("Tahoma", Font.PLAIN, 16));
 		textMdp.setToolTipText("Saissiez votre mot de passe");
-		textMdp.setBounds(229, 199, 371, 30);
+		textMdp.setBounds(209, 214, 371, 30);
 		contentPane.add(textMdp);
 
 		labelErreur = new JLabel("ERREUR");
 		labelErreur.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		labelErreur.setForeground(new Color(255, 0, 0));
-		labelErreur.setBounds(229, 240, 371, 66);
+		labelErreur.setBounds(211, 249, 369, 66);
 		labelErreur.setVisible(false);
 		contentPane.add(labelErreur);
 

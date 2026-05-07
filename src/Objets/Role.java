@@ -1,10 +1,10 @@
 package Objets;
 
 public class Role {
-	
+
 	private String idrole;
 	private String libellerole;
-	
+
 	public Role(String idrole, String libellerole) {
 		this.idrole = idrole;
 		this.libellerole = libellerole;

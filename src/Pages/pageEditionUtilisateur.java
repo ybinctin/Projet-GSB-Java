@@ -28,6 +28,7 @@ public class pageEditionUtilisateur extends JFrame {
 	 */
 	public pageEditionUtilisateur(Utilisateur utilisateur, Utilisateur utilisateurConnecte, String etat) {
 		setBounds(100, 100, 450, 300);
+		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -71,14 +72,14 @@ public class pageEditionUtilisateur extends JFrame {
 		text_prenom.setText(utilisateur.getPrenom());
 		contentPane.add(text_prenom);
 		text_prenom.setColumns(10);
-		
+
 		if (etat.equals("modification")) {
-			setTitle("Modification de " + utilisateur.getNom() + " " + utilisateur.getPrenom());
+			setTitle("| Modification de " + utilisateur.getNom() + " " + utilisateur.getPrenom());
 		} else if (etat.equals("consultation")) {
-			setTitle("Consultation de " + utilisateur.getNom() + " " + utilisateur.getPrenom());
+			setTitle("| Consultation de " + utilisateur.getNom() + " " + utilisateur.getPrenom());
 		}
-		
-		if (etat.equals("modification") || etat.equals("creation")) {
+
+		if (etat.equals("modification")) {
 			text_idUtilisateur.setEditable(true);
 			text_nom.setEditable(true);
 			text_prenom.setEditable(true);

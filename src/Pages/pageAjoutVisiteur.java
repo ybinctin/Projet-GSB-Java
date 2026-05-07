@@ -5,235 +5,316 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import DAO.RegionDAO;
+import DAO.RoleDAO;
+import DAO.UtilisateurDAO;
+import Objets.Region;
+import Objets.Role;
+import Objets.Utilisateur;
+
 import javax.swing.JLabel;
 import java.awt.Font;
 import javax.swing.SwingConstants;
 import java.awt.Panel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.List;
 import java.awt.Color;
 import java.awt.FlowLayout;
+
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JTextField;
+import javax.swing.JComboBox;
 
 public class pageAjoutVisiteur extends JFrame {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
 	private JLabel lblNewLabel;
 	private Panel menu;
 	private JLabel labelMenu;
-	private JButton btnConsulter;
-	private JButton btnModifier;
-	private JButton btnSupprimer;
-	private JTextField textField;
+	private JTextField textPrenom;
 	private JLabel labelPrenom;
 	private JLabel labelNom;
-	private JTextField textField_1;
-	private JTextField textField_2;
+	private JTextField textNom;
+	private JTextField textAdresse;
 	private JLabel labelAdresse;
-	private JTextField textField_3;
+	private JTextField textCp;
 	private JLabel lblCp;
-	private JTextField textField_4;
+	private JTextField textVille;
 	private JLabel lblVille;
-	private JTextField textField_5;
-	private JLabel lblTlphone;
-	private JTextField textField_6;
-	private JLabel lblTlphoneFixe;
-
-	/**
-	 * Launch the application.
-	 */
-	public static void main(String[] args) {
-		EventQueue.invokeLater(new Runnable() {
-			public void run() {
-				try {
-					pageAjoutVisiteur frame = new pageAjoutVisiteur();
-					frame.setVisible(true);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-			}
-		});
-	}
+	private JTextField textTelFix;
+	private JLabel lblTelphone;
+	private JTextField textTelPortable;
+	private JLabel lblTelphoneFixe;
+	private Utilisateur utilisateurConnecte;
+	private JButton btnAnnuler;
+	private Role roleChoisi;
+	private JTextField textId;
 
 	/**
 	 * Create the frame.
 	 */
-	public pageAjoutVisiteur() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 300);
+	public pageAjoutVisiteur(Utilisateur utilisateur) {
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		setSize(724, 430);
+		setLocationRelativeTo(null);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+		utilisateurConnecte = utilisateur;
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		contentPane.add(getLblNewLabel());
 		contentPane.add(getMenu());
-		contentPane.add(getTextField());
+		contentPane.add(getTextPrenom());
 		contentPane.add(getLabelPrenom());
 		contentPane.add(getLabelNom());
-		contentPane.add(getTextField_1());
-		contentPane.add(getTextField_2());
+		contentPane.add(getTextNom());
+		contentPane.add(getTextAdresse());
 		contentPane.add(getLabelAdresse());
-		contentPane.add(getTextField_3());
+		contentPane.add(getTextCp());
 		contentPane.add(getLblCp());
-		contentPane.add(getTextField_4());
+		contentPane.add(getTextVille());
 		contentPane.add(getLblVille());
-		contentPane.add(getTextField_5());
-		contentPane.add(getLblTlphone());
-		contentPane.add(getTextField_6());
-		contentPane.add(getLblTlphoneFixe());
+		contentPane.add(getTextTelFix());
+		contentPane.add(getLblTelphone());
+		contentPane.add(getTextTelPortable());
+		contentPane.add(getLblTelphoneFixe());
+
+		RoleDAO roledao = new RoleDAO();
+		List<Objets.Role> liste = roledao.tousLesRoles();
+
+		JComboBox selectRole = new JComboBox();
+		selectRole.setEditable(false);
+		selectRole.setBounds(229, 308, 201, 20);
+		selectRole.setModel(new DefaultComboBoxModel(new String[] { "Sélectionner du rôle" }));
+		for (int i = 0; i < liste.size(); i++) {
+			selectRole.addItem(liste.get(i).getLibellerole());
+		}
+
+		selectRole.addActionListener(e -> {
+			if (!selectRole.getSelectedItem().equals("Sélectionner du rôle")) {
+				System.out.println(selectRole.getSelectedItem().toString());
+				String libellerole = selectRole.getSelectedItem().toString();
+				roleChoisi = roledao.find(libellerole);
+			}
+		});
+
+		contentPane.add(selectRole);
+
+		JLabel lblRole = new JLabel("Rôle :");
+		lblRole.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblRole.setBounds(30, 309, 150, 14);
+		contentPane.add(lblRole);
+
+		getBtnAnnuler().addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				dispose();
+			}
+		});
+
+		JButton btnAjouter = new JButton("Ajouter");
+		btnAjouter.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		btnAjouter.setBounds(405, 354, 140, 30);
+
+//		btnAjouter.addActionListener(new ActionListener() {
+//			public void actionPerformed(ActionEvent e) {
+//				UtilisateurDAO utilisateurdao = new UtilisateurDAO();
+//				// TODO: finir la création de l'utilisateur
+//				Utilisateur nouveauUtilisateur = new Utilisateur(getTextId(), getTextNom(), getTextPrenom(), );
+//				utilisateurdao.create(utilisateur);
+//			}
+//		});
+
+		contentPane.add(btnAjouter);
+		contentPane.add(getBtnAnnuler());
+
+		contentPane.add(getTextId());
+
+		JLabel labelId = new JLabel("ID :");
+		labelId.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		labelId.setBounds(30, 88, 150, 14);
+		contentPane.add(labelId);
 	}
+
 	private JLabel getLblNewLabel() {
 		if (lblNewLabel == null) {
-			lblNewLabel = new JLabel("{role}");
+			lblNewLabel = new JLabel("Ajouter un visiteur");
 			lblNewLabel.setHorizontalAlignment(SwingConstants.LEFT);
 			lblNewLabel.setFont(new Font("Nirmala UI", Font.BOLD, 20));
-			lblNewLabel.setBounds(10, 0, 51, 27);
+			lblNewLabel.setBounds(10, 0, 231, 27);
 		}
 		return lblNewLabel;
 	}
+
 	private Panel getMenu() {
 		if (menu == null) {
 			menu = new Panel();
 			menu.setBackground(new Color(228, 228, 228));
-			menu.setBounds(0, 33, 434, 34);
+			menu.setBounds(0, 33, 712, 34);
 			FlowLayout fl_menu = new FlowLayout(FlowLayout.LEFT, 5, 5);
 			fl_menu.setAlignOnBaseline(true);
 			menu.setLayout(fl_menu);
 			menu.add(getLabelMenu());
-			menu.add(getBtnConsulter());
-			menu.add(getBtnModifier());
-			menu.add(getBtnSupprimer());
 		}
 		return menu;
 	}
+
 	private JLabel getLabelMenu() {
 		if (labelMenu == null) {
-			labelMenu = new JLabel("Menu {role]");
+			labelMenu = new JLabel(utilisateurConnecte.getRole().getLibellerole());
 			labelMenu.setFont(new Font("Yu Gothic UI", Font.BOLD, 14));
 		}
 		return labelMenu;
 	}
-	private JButton getBtnConsulter() {
-		if (btnConsulter == null) {
-			btnConsulter = new JButton("Statistiques");
+
+	private JTextField getTextPrenom() {
+		if (textPrenom == null) {
+			textPrenom = new JTextField();
+			textPrenom.setBounds(229, 115, 201, 20);
+			textPrenom.setColumns(10);
 		}
-		return btnConsulter;
+		return textPrenom;
 	}
-	private JButton getBtnModifier() {
-		if (btnModifier == null) {
-			btnModifier = new JButton("Fiches F.");
-		}
-		return btnModifier;
-	}
-	private JButton getBtnSupprimer() {
-		if (btnSupprimer == null) {
-			btnSupprimer = new JButton("Visiteur");
-		}
-		return btnSupprimer;
-	}
-	private JTextField getTextField() {
-		if (textField == null) {
-			textField = new JTextField();
-			textField.setBounds(130, 73, 196, 20);
-			textField.setColumns(10);
-		}
-		return textField;
-	}
+
 	private JLabel getLabelPrenom() {
 		if (labelPrenom == null) {
 			labelPrenom = new JLabel("Prénom :");
-			labelPrenom.setBounds(52, 76, 68, 14);
+			labelPrenom.setFont(new Font("Tahoma", Font.PLAIN, 15));
+			labelPrenom.setBounds(30, 115, 150, 14);
 		}
 		return labelPrenom;
 	}
+
 	private JLabel getLabelNom() {
 		if (labelNom == null) {
 			labelNom = new JLabel("Nom :");
-			labelNom.setBounds(52, 101, 68, 14);
+			labelNom.setFont(new Font("Tahoma", Font.PLAIN, 15));
+			labelNom.setBounds(30, 140, 150, 14);
 		}
 		return labelNom;
 	}
-	private JTextField getTextField_1() {
-		if (textField_1 == null) {
-			textField_1 = new JTextField();
-			textField_1.setColumns(10);
-			textField_1.setBounds(130, 98, 196, 20);
+
+	private JTextField getTextNom() {
+		if (textNom == null) {
+			textNom = new JTextField();
+			textNom.setColumns(10);
+			textNom.setBounds(229, 140, 201, 20);
 		}
-		return textField_1;
+		return textNom;
 	}
-	private JTextField getTextField_2() {
-		if (textField_2 == null) {
-			textField_2 = new JTextField();
-			textField_2.setColumns(10);
-			textField_2.setBounds(130, 123, 196, 20);
+
+	private JTextField getTextAdresse() {
+		if (textAdresse == null) {
+			textAdresse = new JTextField();
+			textAdresse.setColumns(10);
+			textAdresse.setBounds(229, 165, 400, 20);
 		}
-		return textField_2;
+		return textAdresse;
 	}
+
 	private JLabel getLabelAdresse() {
 		if (labelAdresse == null) {
 			labelAdresse = new JLabel("Adresse :");
-			labelAdresse.setBounds(52, 126, 68, 14);
+			labelAdresse.setFont(new Font("Tahoma", Font.PLAIN, 15));
+			labelAdresse.setBounds(30, 165, 150, 14);
 		}
 		return labelAdresse;
 	}
-	private JTextField getTextField_3() {
-		if (textField_3 == null) {
-			textField_3 = new JTextField();
-			textField_3.setColumns(10);
-			textField_3.setBounds(130, 151, 196, 20);
+
+	private JTextField getTextCp() {
+		if (textCp == null) {
+			textCp = new JTextField();
+			textCp.setColumns(10);
+			textCp.setBounds(229, 193, 201, 20);
 		}
-		return textField_3;
+		return textCp;
 	}
+
 	private JLabel getLblCp() {
 		if (lblCp == null) {
 			lblCp = new JLabel("CP : ");
-			lblCp.setBounds(52, 154, 68, 14);
+			lblCp.setFont(new Font("Tahoma", Font.PLAIN, 15));
+			lblCp.setBounds(30, 193, 150, 14);
 		}
 		return lblCp;
 	}
-	private JTextField getTextField_4() {
-		if (textField_4 == null) {
-			textField_4 = new JTextField();
-			textField_4.setColumns(10);
-			textField_4.setBounds(130, 179, 196, 20);
+
+	private JTextField getTextVille() {
+		if (textVille == null) {
+			textVille = new JTextField();
+			textVille.setColumns(10);
+			textVille.setBounds(229, 221, 400, 20);
 		}
-		return textField_4;
+		return textVille;
 	}
+
 	private JLabel getLblVille() {
 		if (lblVille == null) {
 			lblVille = new JLabel("Ville :");
-			lblVille.setBounds(52, 182, 68, 14);
+			lblVille.setFont(new Font("Tahoma", Font.PLAIN, 15));
+			lblVille.setBounds(30, 221, 150, 14);
 		}
 		return lblVille;
 	}
-	private JTextField getTextField_5() {
-		if (textField_5 == null) {
-			textField_5 = new JTextField();
-			textField_5.setColumns(10);
-			textField_5.setBounds(130, 207, 196, 20);
+
+	private JTextField getTextTelFix() {
+		if (textTelFix == null) {
+			textTelFix = new JTextField();
+			textTelFix.setColumns(10);
+			textTelFix.setBounds(229, 249, 400, 20);
 		}
-		return textField_5;
+		return textTelFix;
 	}
-	private JLabel getLblTlphone() {
-		if (lblTlphone == null) {
-			lblTlphone = new JLabel("Téléphone fixe :");
-			lblTlphone.setBounds(52, 210, 68, 14);
+
+	private JLabel getLblTelphone() {
+		if (lblTelphone == null) {
+			lblTelphone = new JLabel("Téléphone fixe :");
+			lblTelphone.setFont(new Font("Tahoma", Font.PLAIN, 15));
+			lblTelphone.setBounds(30, 249, 150, 14);
 		}
-		return lblTlphone;
+		return lblTelphone;
 	}
-	private JTextField getTextField_6() {
-		if (textField_6 == null) {
-			textField_6 = new JTextField();
-			textField_6.setColumns(10);
-			textField_6.setBounds(130, 235, 196, 20);
+
+	private JTextField getTextTelPortable() {
+		if (textTelPortable == null) {
+			textTelPortable = new JTextField();
+			textTelPortable.setColumns(10);
+			textTelPortable.setBounds(229, 277, 400, 20);
 		}
-		return textField_6;
+		return textTelPortable;
 	}
-	private JLabel getLblTlphoneFixe() {
-		if (lblTlphoneFixe == null) {
-			lblTlphoneFixe = new JLabel("Téléphone portable :");
-			lblTlphoneFixe.setBounds(52, 238, 68, 14);
+
+	private JLabel getLblTelphoneFixe() {
+		if (lblTelphoneFixe == null) {
+			lblTelphoneFixe = new JLabel("Téléphone portable :");
+			lblTelphoneFixe.setFont(new Font("Tahoma", Font.PLAIN, 15));
+			lblTelphoneFixe.setBounds(30, 278, 150, 14);
 		}
-		return lblTlphoneFixe;
+		return lblTelphoneFixe;
+	}
+
+	private JButton getBtnAnnuler() {
+		if (btnAnnuler == null) {
+			btnAnnuler = new JButton("Annuler");
+			btnAnnuler.setFont(new Font("Tahoma", Font.PLAIN, 14));
+			btnAnnuler.setBounds(562, 354, 140, 30);
+		}
+		return btnAnnuler;
+	}
+
+	private JTextField getTextId() {
+		if (textId == null) {
+			textId = new JTextField();
+			textId.setColumns(10);
+			textId.setBounds(229, 87, 201, 20);
+		}
+		return textId;
 	}
 }
