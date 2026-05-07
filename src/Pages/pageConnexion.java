@@ -51,47 +51,53 @@ public class pageConnexion extends JFrame {
 	 */
 	public pageConnexion() {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setSize(724, 510);
+		setSize(724, 430);
 		setLocationRelativeTo(null);
-		setTitle("Se connecter à son espace");
+		setTitle("Page de connexion");
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		JLabel titrePageConnexion = new JLabel("Page de connexion");
-		titrePageConnexion.setFont(new Font("Tahoma", Font.BOLD, 20));
+		JLabel titrePageConnexion = new JLabel("Connexion à son espace");
+		titrePageConnexion.setFont(new Font("Tahoma", Font.BOLD, 30));
 		titrePageConnexion.setHorizontalAlignment(SwingConstants.CENTER);
-		titrePageConnexion.setBounds(10, 11, 688, 33);
+		titrePageConnexion.setBounds(10, 11, 688, 50);
 		contentPane.add(titrePageConnexion);
 
 		JLabel labelLogin = new JLabel("Login :");
-		labelLogin.setBounds(178, 191, 128, 14);
+		labelLogin.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		labelLogin.setBounds(142, 135, 172, 33);
 		contentPane.add(labelLogin);
 
 		JLabel labelMdp = new JLabel("Mot de passe :");
-		labelMdp.setBounds(178, 221, 128, 14);
+		labelMdp.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		labelMdp.setBounds(80, 197, 172, 29);
 		contentPane.add(labelMdp);
 
 		textLogin = new JTextField();
+		textLogin.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		textLogin.setToolTipText("Saisissez votre login");
-		textLogin.setBounds(311, 188, 190, 20);
+		textLogin.setBounds(229, 139, 371, 30);
 		contentPane.add(textLogin);
 		textLogin.setColumns(10);
 
 		textMdp = new JPasswordField();
+		textMdp.setFont(new Font("Tahoma", Font.PLAIN, 13));
 		textMdp.setToolTipText("Saissiez votre mot de passe");
-		textMdp.setBounds(311, 218, 190, 20);
+		textMdp.setBounds(229, 199, 371, 30);
 		contentPane.add(textMdp);
 
 		labelErreur = new JLabel("ERREUR");
+		labelErreur.setFont(new Font("Tahoma", Font.PLAIN, 15));
 		labelErreur.setForeground(new Color(255, 0, 0));
-		labelErreur.setBounds(178, 249, 206, 14);
+		labelErreur.setBounds(229, 240, 371, 66);
 		labelErreur.setVisible(false);
 		contentPane.add(labelErreur);
 
 		JButton btnValider = new JButton("Se connecter");
+		btnValider.setFont(new Font("Tahoma", Font.PLAIN, 17));
 		btnValider.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				String login = textLogin.getText();
@@ -124,7 +130,7 @@ public class pageConnexion extends JFrame {
 			}
 		});
 
-		btnValider.setBounds(558, 437, 140, 23);
+		btnValider.setBounds(526, 347, 172, 33);
 		contentPane.add(btnValider);
 	}
 }

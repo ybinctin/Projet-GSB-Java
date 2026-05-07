@@ -71,19 +71,19 @@ public class pageEditionUtilisateur extends JFrame {
 		text_prenom.setText(utilisateur.getPrenom());
 		contentPane.add(text_prenom);
 		text_prenom.setColumns(10);
-
+		
+		if (etat.equals("modification")) {
+			setTitle("Modification de " + utilisateur.getNom() + " " + utilisateur.getPrenom());
+		} else if (etat.equals("consultation")) {
+			setTitle("Consultation de " + utilisateur.getNom() + " " + utilisateur.getPrenom());
+		}
+		
 		if (etat.equals("modification") || etat.equals("creation")) {
 			text_idUtilisateur.setEditable(true);
 			text_nom.setEditable(true);
 			text_prenom.setEditable(true);
 
-			if (etat.equals("modification")) {
-				setTitle("Modification de " + utilisateur.getNom() + " " + utilisateur.getPrenom());
-			} else if (etat.equals("consultation")) {
-				setTitle("Consultation de " + utilisateur.getNom() + " " + utilisateur.getPrenom());
-			}
-		}
-		else {
+		} else {
 			text_idUtilisateur.setEditable(false);
 			text_nom.setEditable(false);
 			text_prenom.setEditable(false);
@@ -105,8 +105,7 @@ public class pageEditionUtilisateur extends JFrame {
 						pageSecretaire.instance.updateListeUtilisateurs();
 						dispose();
 					}
-				}
-				else {
+				} else {
 					dispose();
 				}
 			}

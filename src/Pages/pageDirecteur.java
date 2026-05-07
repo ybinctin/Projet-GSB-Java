@@ -90,7 +90,11 @@ public class pageDirecteur extends JFrame {
 		for (int i = 0; i < liste.size(); i++) {
 			selectRegion.addItem(liste.get(i).getNomRegion());
 		}
-		selectRegion.setToolTipText("");
+		
+		// Obtention de la valeur de région selectionnée
+		selectRegion.addActionListener(e -> {
+			System.out.println(selectRegion.getSelectedItem());
+		});
 		zoneFiltre.add(selectRegion);
 
 		filtreId = new JTextField();
@@ -141,7 +145,7 @@ public class pageDirecteur extends JFrame {
 		JScrollPane scrollPane = new JScrollPane(table);
 		scrollPane.setBounds(10, 111, 688, 316);
 		contentPane.add(scrollPane);
-		
+
 		JButton btnConsulter = new JButton("Consulter");
 		btnConsulter.setBounds(300, 438, 161, 23);
 
@@ -156,9 +160,9 @@ public class pageDirecteur extends JFrame {
 				pageEU.show();
 			}
 		});
-		
+
 		contentPane.add(btnConsulter);
-		
+
 	}
 
 	private void filtrer() {
