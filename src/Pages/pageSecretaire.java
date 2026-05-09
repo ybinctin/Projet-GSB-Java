@@ -55,7 +55,7 @@ public class pageSecretaire extends JFrame {
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setSize(724, 510);
 		setLocationRelativeTo(null);
-		setTitle("| Espace secrétaire");
+		setTitle("| Espace secrétaire - " + utilisateurConnecte.getNom() + " " + utilisateurConnecte.getPrenom());
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 

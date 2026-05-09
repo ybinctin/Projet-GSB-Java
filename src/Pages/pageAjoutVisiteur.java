@@ -87,32 +87,6 @@ public class pageAjoutVisiteur extends JFrame {
 		contentPane.add(getTextTelPortable());
 		contentPane.add(getLblTelphoneFixe());
 
-		RoleDAO roledao = new RoleDAO();
-		List<Objets.Role> liste = roledao.tousLesRoles();
-
-		JComboBox selectRole = new JComboBox();
-		selectRole.setEditable(false);
-		selectRole.setBounds(229, 308, 201, 20);
-		selectRole.setModel(new DefaultComboBoxModel(new String[] { "Sélectionner du rôle" }));
-		for (int i = 0; i < liste.size(); i++) {
-			selectRole.addItem(liste.get(i).getLibellerole());
-		}
-
-		selectRole.addActionListener(e -> {
-			if (!selectRole.getSelectedItem().equals("Sélectionner du rôle")) {
-				System.out.println(selectRole.getSelectedItem().toString());
-				String libellerole = selectRole.getSelectedItem().toString();
-				roleChoisi = roledao.find(libellerole);
-			}
-		});
-
-		contentPane.add(selectRole);
-
-		JLabel lblRole = new JLabel("Rôle :");
-		lblRole.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblRole.setBounds(30, 309, 150, 14);
-		contentPane.add(lblRole);
-
 		getBtnAnnuler().addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				dispose();
@@ -133,7 +107,7 @@ public class pageAjoutVisiteur extends JFrame {
 //		});
 
 		contentPane.add(btnAjouter);
-		contentPane.add(getBtnAnnuler());
+		contentPane.add(getBtnAnnuler()); 
 
 		contentPane.add(getTextId());
 

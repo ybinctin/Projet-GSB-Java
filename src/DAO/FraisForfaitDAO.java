@@ -3,11 +3,9 @@ package DAO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-
 import Objets.FraisForfait;
 
-public class FraisForfaitDAO extends DAO<FraisForfait>{
-	
+public class FraisForfaitDAO extends DAO<FraisForfait> {
 	private Connection con;
 
 	public FraisForfaitDAO() {
@@ -23,8 +21,7 @@ public class FraisForfaitDAO extends DAO<FraisForfait>{
 			preparedStatement.setDouble(3, obj.getMontant());
 			preparedStatement.executeUpdate();
 			return true;
-		}
-		catch(SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
 		}
@@ -36,8 +33,7 @@ public class FraisForfaitDAO extends DAO<FraisForfait>{
 		try (PreparedStatement preparedStatement = con.prepareStatement(sql)) {
 			preparedStatement.executeUpdate();
 			return true;
-		}
-		catch(SQLException e) {
+		} catch (SQLException e) {
 			e.printStackTrace();
 			return false;
 		}
