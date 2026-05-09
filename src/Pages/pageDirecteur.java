@@ -41,8 +41,8 @@ public class pageDirecteur extends JFrame {
 	private JTable table;
 	private DefaultTableModel model;
 	private List<Utilisateur> listeUtilisateurs;
-	private JLabel lbl_debug;
 	private JButton btnFicheFrais;
+	private JLabel lblErreur_global;
 
 	/**
 	 * Create the frame.
@@ -60,11 +60,11 @@ public class pageDirecteur extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 
-		JLabel lblNewLabel = new JLabel("Fiche visiteur");
-		lblNewLabel.setHorizontalAlignment(SwingConstants.LEFT);
-		lblNewLabel.setFont(new Font("Nirmala UI", Font.BOLD, 20));
-		lblNewLabel.setBounds(10, 0, 195, 27);
-		contentPane.add(lblNewLabel);
+		JLabel lblTitre = new JLabel("Fiche visiteur");
+		lblTitre.setHorizontalAlignment(SwingConstants.LEFT);
+		lblTitre.setFont(new Font("Nirmala UI", Font.BOLD, 20));
+		lblTitre.setBounds(10, 0, 195, 27);
+		contentPane.add(lblTitre);
 
 		Panel menu = new Panel();
 		menu.setBackground(new Color(228, 228, 228));
@@ -96,11 +96,11 @@ public class pageDirecteur extends JFrame {
 		// Obtention de la valeur de région selectionnée
 		selectRegion.addActionListener(e -> {
 			if (!selectRegion.getSelectedItem().equals("Sélectionner la région")) {
-				System.out.println(selectRegion.getSelectedItem());
+				// System.out.println(selectRegion.getSelectedItem());
 				listeUtilisateurs = utilisateurdao.utilisateursDeRegion(selectRegion.getSelectedItem().toString());
 				filtrer();
 			} else {
-				listeUtilisateurs = utilisateurdao.tousLesUtilisateurs();
+				listeUtilisateurs = utilisateurdao.tousLesVisiteurs();
 				filtrer();
 			}
 		});
@@ -161,17 +161,44 @@ public class pageDirecteur extends JFrame {
 
 		btnConsulter.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println(model.getValueAt(table.getSelectedRow(), 0));
+				if (table.getSelectedRowCount() == 1) {
+					// System.out.println(model.getValueAt(table.getSelectedRow(), 0));
+					lblErreur_global.setVisible(false);
 
-				UtilisateurDAO utilisaDAO = new UtilisateurDAO();
-				Utilisateur utilisateur = utilisaDAO.find(model.getValueAt(table.getSelectedRow(), 0).toString());
-				pageEditionUtilisateur pageEU = new pageEditionUtilisateur(utilisateur, utilisateurConnecte,
-						"consultation");
-				pageEU.show();
+					UtilisateurDAO utilisaDAO = new UtilisateurDAO();
+					Utilisateur utilisateur = utilisaDAO.find(model.getValueAt(table.getSelectedRow(), 0).toString());
+					pageEditionUtilisateur pageEU = new pageEditionUtilisateur(utilisateur, utilisateurConnecte,
+							"consultation");
+					pageEU.show();
+				} else {
+					lblErreur_global.setVisible(true);
+				}
 			}
 		});
 
 		contentPane.add(btnConsulter);
+
+		JLabel lblErreur = new JLabel("Veuillez sélectionner une ligne.");
+		lblErreur.setForeground(new Color(255, 0, 0));
+		lblErreur.setHorizontalAlignment(SwingConstants.LEFT);
+		lblErreur.setFont(new Font("Arial", Font.BOLD | Font.ITALIC, 15));
+		lblErreur.setBounds(10, 435, 303, 27);
+		lblErreur.setVisible(false);
+		lblErreur_global = lblErreur;
+		contentPane.add(lblErreur);
+
+		JButton btnDeconnexion = new JButton("➜] Déconnexion");
+		btnDeconnexion.setForeground(Color.WHITE);
+		btnDeconnexion.setBackground(new Color(151, 0, 0));
+		btnDeconnexion.setBounds(563, 438, 135, 23);
+		btnDeconnexion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				pageConnexion pageCo = new pageConnexion();
+				pageCo.show();
+				dispose();
+			}
+		});
+		contentPane.add(btnDeconnexion);
 
 	}
 
@@ -194,7 +221,7 @@ public class pageDirecteur extends JFrame {
 	public void updateListeUtilisateurs() {
 
 		UtilisateurDAO utilisateurdao = new UtilisateurDAO();
-		listeUtilisateurs = utilisateurdao.tousLesUtilisateurs();
+		listeUtilisateurs = utilisateurdao.tousLesVisiteurs();
 
 		model.setRowCount(0);
 

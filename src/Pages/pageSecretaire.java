@@ -43,7 +43,7 @@ public class pageSecretaire extends JFrame {
 	private List<Utilisateur> listeUtilisateurs;
 	public static pageSecretaire instance;
 	private JLabel decoEspace;
-	private JLabel lbl_debug;
+	private JLabel lblErreur_global;
 	private Utilisateur utilisateurConnectee;
 
 	/**
@@ -100,11 +100,11 @@ public class pageSecretaire extends JFrame {
 		// Au changement de la valeur de selection
 		selectRegion.addActionListener(e -> {
 			if (!selectRegion.getSelectedItem().equals("Sélectionner la région")) {
-				System.out.println(selectRegion.getSelectedItem());
+				// System.out.println(selectRegion.getSelectedItem());
 				listeUtilisateurs = utilisateurdao.utilisateursDeRegion(selectRegion.getSelectedItem().toString());
 				filtrer();
 			} else {
-				listeUtilisateurs = utilisateurdao.tousLesUtilisateurs();
+				listeUtilisateurs = utilisateurdao.tousLesVisiteurs();
 				filtrer();
 			}
 		});
@@ -191,6 +191,27 @@ public class pageSecretaire extends JFrame {
 		JButton btnSupprimer = new JButton("Supprimer");
 		menu.add(btnSupprimer);
 
+		JLabel lblErreur = new JLabel("Veuillez sélectionner une ligne.");
+		lblErreur.setForeground(new Color(255, 0, 0));
+		lblErreur.setFont(new Font("Arial", Font.BOLD | Font.ITALIC, 15));
+		lblErreur.setBounds(10, 438, 533, 26);
+		lblErreur.setVisible(false);
+		lblErreur_global = lblErreur;
+		contentPane.add(lblErreur);
+
+		JButton btnDeconnexion = new JButton("➜] Déconnexion");
+		btnDeconnexion.setBounds(563, 441, 135, 23);
+		btnDeconnexion.setForeground(new Color(255, 255, 255));
+		btnDeconnexion.setBackground(new Color(151, 0, 0));
+		btnDeconnexion.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				pageConnexion pageCo = new pageConnexion();
+				pageCo.show();
+				dispose();
+			}
+		});
+		contentPane.add(btnDeconnexion);
+
 	}
 
 	private void filtrer() {
@@ -212,7 +233,7 @@ public class pageSecretaire extends JFrame {
 	public void updateListeUtilisateurs() {
 
 		UtilisateurDAO utilisateurdao = new UtilisateurDAO();
-		listeUtilisateurs = utilisateurdao.tousLesUtilisateurs();
+		listeUtilisateurs = utilisateurdao.tousLesVisiteurs();
 
 		model.setRowCount(0);
 
@@ -229,25 +250,18 @@ public class pageSecretaire extends JFrame {
 		return decoEspace;
 	}
 
-	private JLabel getLbl_debug() {
-		if (lbl_debug == null) {
-			lbl_debug = new JLabel("Debug");
-			lbl_debug.setBounds(20, 442, 177, 14);
-		}
-		return lbl_debug;
-	}
-
 	private void afficherPageMode(String mode, Utilisateur utilisateurConnecte) {
 		if (table.getSelectedRowCount() == 1) {
 
-			System.out.println(model.getValueAt(table.getSelectedRow(), 0));
+			// System.out.println(model.getValueAt(table.getSelectedRow(), 0));
+			lblErreur_global.setVisible(false);
 
 			UtilisateurDAO utilisaDAO = new UtilisateurDAO();
 			Utilisateur utilisateur = utilisaDAO.find(model.getValueAt(table.getSelectedRow(), 0).toString());
 			pageEditionUtilisateur pageEU = new pageEditionUtilisateur(utilisateur, utilisateurConnecte, mode);
 			pageEU.show();
 		} else {
-			System.out.println("Nombre de ligne selectionnée différent de 1.");
+			lblErreur_global.setVisible(true);
 		}
 	}
 }
